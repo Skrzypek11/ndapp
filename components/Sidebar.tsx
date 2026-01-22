@@ -30,7 +30,7 @@ export default function Sidebar() {
 
     useEffect(() => {
         if (user?.id) {
-            getUnreadCount(user.id).then(setUnreadCount)
+            getUnreadCount().then(setUnreadCount)
         }
     }, [user?.id, pathname])
 
