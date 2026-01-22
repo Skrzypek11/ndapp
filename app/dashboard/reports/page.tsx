@@ -6,18 +6,27 @@ import Link from "next/link"
 import { Plus, FileText, Search, Eye, Download, ChevronLeft, ChevronRight, FileDown } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 import { getReports } from "@/app/actions/reports"
+import { Report } from "@/lib/store/reports"
 
 export default function ReportsListPage() {
     const { data: session } = useSession()
     const { dict } = useTranslation()
-    const [reports, setReports] = useState<any[]>([])
+    const [reports, setReports] = useState<Report[]>([])
     const [loading, setLoading] = useState(true)
     const [exportingId, setExportingId] = useState<string | null>(null)
 
     useEffect(() => {
         const loadData = async () => {
             const data = await getReports()
-            setReports(data)
+            const mappedData: Report[] = data.map((r: any) => ({
+                ...r,
+                reportNumber: r.reportNumber || "Pending Number",
+                map: r.mapData || { markers: [], shapes: [] },
+                // videos is deprecated in type but might be required
+                videos: [],
+                coAuthorIds: r.coAuthors ? r.coAuthors.map((c: any) => c.id) : []
+            }))
+            setReports(mappedData)
             setLoading(false)
         }
         loadData()
