@@ -1,0 +1,471 @@
+/* Main Container */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    grid-template-rows: auto 1fr auto;
+    gap: 1.5rem;
+    height: calc(100vh - 2rem);
+    /* Full height minus padding */
+    max-width: 1600px;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+}
+
+/* Header Section */
+.headerCard {
+    grid-column: 1 / -1;
+    background: rgba(36, 48, 33, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(90, 140, 67, 0.3);
+    border-radius: 0.25rem;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.headerMain {
+    flex: 1;
+}
+
+.reportTitleInput {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    font-weight: 800;
+    color: hsl(var(--foreground));
+    text-transform: uppercase;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.reportTitleInput:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.headerMeta {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.metaGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Narrative Section (Left Col) */
+.narrativeCard {
+    grid-column: 1 / 2;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(61, 77, 56, 0.4);
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+}
+
+.narrativeHeader {
+    padding: 1rem;
+    background: rgba(26, 36, 24, 0.8);
+    border-bottom: 1px solid rgba(61, 77, 56, 0.4);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+    letter-spacing: 0.1em;
+    font-size: 0.85rem;
+}
+
+/* Sidebar (Right Col) */
+.sidebar {
+    grid-column: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+}
+
+.sideCard {
+    background: rgba(36, 48, 33, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(90, 140, 67, 0.3);
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.cardHeader {
+    padding: 0.75rem 1rem;
+    background: rgba(26, 36, 24, 0.6);
+    border-bottom: 1px solid rgba(61, 77, 56, 0.3);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(243, 230, 188, 0.7);
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cardContent {
+    padding: 1rem;
+}
+
+/* Actions Footer */
+.actionsBar {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: rgba(15, 23, 42, 0.8);
+    border-top: 1px solid rgba(90, 140, 67, 0.3);
+    padding: 1rem;
+    position: sticky;
+    bottom: 0;
+    backdrop-filter: blur(10px);
+}
+
+/* Shared Utilities */
+.label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(243, 230, 188, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+}
+
+.templateSelect {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(61, 77, 56, 0.4);
+    color: hsl(var(--primary));
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.btnPrimary {
+    background: hsl(var(--primary));
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnSecondary {
+    background: transparent;
+    border: 1px solid rgba(61, 77, 56, 0.6);
+    color: rgba(243, 230, 188, 0.8);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+}
+
+/* Map specific overrides */
+.mapWrapper {
+    height: 300px;
+    position: relative;
+}
+
+/* Dashboard List View */
+.listContainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.dashboardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboardTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: hsl(var(--primary));
+    margin: 0;
+    border-left: 4px solid hsl(var(--primary));
+    padding-left: 1rem;
+}
+
+.btnCreate {
+    background: hsl(var(--primary));
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+}
+
+.btnCreate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px hsl(var(--primary) / 0.2);
+    filter: brightness(1.1);
+}
+
+/* Table Design */
+.tableWrapper {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(61, 77, 56, 0.4);
+    border-radius: 4px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.reportTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.tableHeadRow {
+    background: rgba(26, 36, 24, 0.9);
+    border-bottom: 2px solid rgba(90, 140, 67, 0.4);
+}
+
+.tableHeader {
+    padding: 1.25rem 1rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(90, 140, 67, 0.9);
+}
+
+.tableRow {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s;
+}
+
+.tableRow:hover {
+    background: rgba(90, 140, 67, 0.05);
+}
+
+.tableCell {
+    padding: 1rem;
+    font-size: 0.85rem;
+}
+
+.reportNumber {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: hsl(var(--primary));
+}
+
+.reportTitle {
+    font-weight: 600;
+    color: white;
+}
+
+.timestampRow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+/* Status Badges */
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid transparent;
+}
+
+.status_draft {
+    background: rgba(148, 163, 184, 0.1);
+    color: #94a3b8;
+    border-color: rgba(148, 163, 184, 0.2);
+}
+
+.status_submitted {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.status_inreview {
+    background: rgba(234, 179, 8, 0.1);
+    color: #eab308;
+    border-color: rgba(234, 179, 8, 0.2);
+}
+
+.status_rejected {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.status_approved {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+/* Actions */
+.actionsCell {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.actionBtn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid transparent;
+    text-decoration: none;
+}
+
+.btnView {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btnView:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btnExport {
+    background: hsl(var(--primary));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btnExport:disabled {
+    opacity: 0.3;
+    filter: grayscale(1);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Tooltips */
+.tooltipContainer {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltipText {
+    visibility: hidden;
+    width: 200px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 8px;
+    position: absolute;
+    z-index: 10;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.7rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.tooltipContainer:hover .tooltipText {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Empty State */
+.emptyState {
+    padding: 6rem 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(15, 23, 42, 0.2);
+    border: 1px dashed rgba(90, 140, 67, 0.2);
+    border-radius: 8px;
+}
+
+.emptyTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.1em;
+}
+
+/* Pagination Mock */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    opacity: 0.6;
+}
+
+.pageInfo {
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+}
+
+.pageControls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pageBtn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.pageBtnActive {
+    background: hsl(var(--primary));
+    border-color: transparent;
+    color: white;
+}

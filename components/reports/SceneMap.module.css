@@ -1,0 +1,66 @@
+.mapContainer {
+    height: 400px;
+    width: 100%;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    border: 1px solid rgba(61, 77, 56, 0.4);
+    background: #0f172a;
+    position: relative;
+}
+
+/* Dark mode map tiles */
+.mapContainer :global(.leaflet-tile-pane) {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%) opacity(0.8);
+}
+
+.mapContainer :global(.leaflet-container) {
+    background: #0f172a;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Custom Marker Styling */
+.customMarker {
+    background: transparent;
+    border: none;
+}
+
+.markerIcon {
+    width: 32px;
+    height: 32px;
+    background: hsl(var(--primary));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip {
+    background: rgba(26, 36, 24, 0.9);
+    border: 1px solid hsl(var(--primary));
+    color: white;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.tooltip::before {
+    border-top-color: hsl(var(--primary));
+}
+
+.instructions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(26, 36, 24, 0.8);
+    backdrop-filter: blur(4px);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(61, 77, 56, 0.5);
+    z-index: 1000;
+    font-size: 0.75rem;
+    color: rgba(243, 230, 188, 0.8);
+    pointer-events: none;
+}

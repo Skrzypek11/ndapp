@@ -1,0 +1,157 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid rgba(90, 140, 67, 0.4);
+    padding-bottom: 1rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.section {
+    background: rgba(36, 48, 33, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(90, 140, 67, 0.3);
+    border-radius: 0.25rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.sectionHeader {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(61, 77, 56, 0.3);
+    padding-bottom: 0.5rem;
+}
+
+.sectionTitle {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: hsl(var(--primary));
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(243, 230, 188, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.value {
+    font-size: 0.9rem;
+    color: hsl(var(--foreground));
+    background: rgba(26, 36, 24, 0.5);
+    padding: 0.75rem;
+    border-radius: 0.125rem;
+    border: 1px solid rgba(61, 77, 56, 0.4);
+    font-family: monospace;
+}
+
+.input {
+    background: rgba(26, 36, 24, 0.5);
+    border: 1px solid rgba(61, 77, 56, 0.4);
+    border-radius: 0.125rem;
+    padding: 0.75rem;
+    color: hsl(var(--foreground));
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.input:focus {
+    border-color: hsl(var(--primary));
+    outline: none;
+    background: rgba(26, 36, 24, 0.7);
+    box-shadow: 0 0 0 1px hsl(var(--primary));
+}
+
+.button {
+    background: hsl(var(--primary));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+    align-self: flex-start;
+}
+
+.button:hover {
+    background: #4d7a39;
+    box-shadow: 0 4px 12px rgba(90, 140, 67, 0.3);
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.toggleGroup {
+    display: flex;
+    background: rgba(26, 36, 24, 0.5);
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(61, 77, 56, 0.4);
+    gap: 0.25rem;
+}
+
+.toggleOption {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.5rem;
+    border-radius: 0.125rem;
+    font-size: 0.75rem;
+    color: rgba(243, 230, 188, 0.4);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.toggleOption:hover {
+    color: hsl(var(--foreground));
+    background: rgba(90, 140, 67, 0.1);
+}
+
+.activeToggle {
+    background: hsl(var(--primary));
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

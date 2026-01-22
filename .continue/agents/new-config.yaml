@@ -1,0 +1,11 @@
+version: 1.0.0
+schema: v1
+
+models:
+  - name: coder
+    provider: ollama
+    model: deepseek-coder:6.7b
+
+actions:
+  - name: shell
+    shell: bash

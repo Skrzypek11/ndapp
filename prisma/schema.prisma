@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  password       String
+  rpName         String
+  firstName      String?
+  lastName       String?
+  badgeNumber    String    @unique
+  phoneNumber    String?
+  avatarUrl      String?
+  status         String    @default("Active")
+  unitAssignment String?
+  notes          String?
+  certifications String?
+  lastActive     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  rankId         String
+  rank           Rank      @relation(fields: [rankId], references: [id])
+
+  // Relations for Stats & Process
+  authoredReports   Report[]    @relation("ReportAuthor")
+  coAuthoredReports Report[]    @relation("ReportCoAuthors")
+  reviewedReports   Report[]    @relation("ReportReviewer")
+  
+  reportedCases     CaseModel[] @relation("CaseReportingOfficer")
+  ledCases          CaseModel[] @relation("CaseLeadInvestigator")
+  participatedCases CaseModel[] @relation("CaseParticipants")
+
+  // New Relations
+  authoredAnnouncements Announcement[]    @relation("AnnouncementAuthor")
+  readAnnouncements     AnnouncementRead[]
+  authoredCompendiumDocs CompendiumDoc[]   @relation("CompendiumAuthor")
+}
+
+model Rank {
+  id         String @id @default(uuid())
+  name       String @unique
+  order      Int    @default(0)
+  systemRole String @default("GUEST")
+  users      User[]
+}
+
+model Report {
+  id              String    @id @default(uuid())
+  reportNumber    String?
+  title           String
+  content         String?   // HTML Narrative
+  status          String    @default("DRAFT")
+  
+  // Tactical Data (JSON for flexibility in Serverless)
+  mapData         Json?     // { markers: [], shapes: [] }
+  legend          Json?     // Color to title mapping
+  evidence        Json?     // { photo: [], video: [] }
+  attachments     Json?     
+  
+  // Auth & Relations
+  authorId        String
+  author          User      @relation("ReportAuthor", fields: [authorId], references: [id])
+  coAuthors       User[]    @relation("ReportCoAuthors")
+  
+  // Review Process
+  reviewerId      String?
+  reviewer        User?     @relation("ReportReviewer", fields: [reviewerId], references: [id])
+  rejectionReason String?
+  submittedAt     DateTime?
+  reviewedAt      DateTime?
+  approvedAt      DateTime?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Link to Cases
+  cases           CaseModel[] @relation("CaseReports")
+}
+
+model CaseModel {
+  id              String    @id @default(uuid())
+  caseId          String?
+  title           String
+  description     String?
+  status          String    @default("DRAFT")
+  
+  // Assignments
+  reportingOfficerId String
+  reportingOfficer   User      @relation("CaseReportingOfficer", fields: [reportingOfficerId], references: [id])
+  leadInvestigatorId String
+  leadInvestigator   User      @relation("CaseLeadInvestigator", fields: [leadInvestigatorId], references: [id])
+  participants       User[]    @relation("CaseParticipants")
+  
+  // Data
+  linkedReports   Report[]  @relation("CaseReports")
+  rejectionReason String?
+  
+  // Timestamps
+  submittedAt     DateTime?
+  approvedAt      DateTime?
+  closedAt        DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Announcement {
+  id        String             @id @default(uuid())
+  title     String
+  body      String
+  priority  String             @default("normal") // normal, high, critical
+  isPinned  Boolean            @default(false)
+  authorId  String
+  author    User               @relation("AnnouncementAuthor", fields: [authorId], references: [id])
+  readBy    AnnouncementRead[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+model AnnouncementRead {
+  id             String       @id @default(uuid())
+  announcementId String
+  userId         String
+  announcement   Announcement @relation(fields: [announcementId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+  readAt         DateTime     @default(now())
+
+  @@unique([announcementId, userId])
+}
+
+model CompendiumDoc {
+  id        String   @id @default(uuid())
+  title     String
+  body      String
+  category  String   // Combined path e.g. "Law/Procedures"
+  tags      String?  // Comma-separated
+  authorId  String
+  author    User     @relation("CompendiumAuthor", fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

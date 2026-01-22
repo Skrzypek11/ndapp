@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&subset=latin,latin-ext&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&subset=latin,latin-ext&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Global Theme - Dark Military Terminal (Default) */
+  --background: 140 18% 7%;
+  /* #0E1410 */
+  --foreground: 82 30% 90%;
+  /* Increased lightness from 86% to 90% for better readability */
+
+  --card: 140 18% 10%;
+  /* Slightly lighter than background */
+  --card-foreground: 82 30% 90%;
+
+  --popover: 140 18% 10%;
+  --popover-foreground: 82 30% 90%;
+
+  --primary: 104 33% 56%;
+  /* #7FB26C - Green Accent */
+  --primary-foreground: 140 18% 7%;
+
+  --secondary: 100 10% 20%;
+  /* #2D332B */
+  --secondary-foreground: 102 10% 70%;
+  /* Increased from 63% to 70% for better contrast */
+
+  --muted: 100 10% 15%;
+  --muted-foreground: 102 10% 70%;
+  /* Increased from 63% to 70% for better contrast */
+
+  --accent: 104 33% 56%;
+  --accent-foreground: 140 18% 7%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 82 30% 95%;
+
+  --border: 0 0% 100% / 0.12;
+  /* Increased from 0.08 for better visibility */
+  --input: 100 10% 15%;
+  --ring: 104 33% 56%;
+
+  --radius: 6px;
+}
+
+[data-theme='light'] {
+  --background: 80 14% 95%;
+  /* #F3F5F0 */
+  --foreground: 132 27% 8%;
+  /* #0F1A11 */
+
+  --card: 0 0% 100%;
+  /* #FFFFFF */
+  --card-foreground: 132 27% 8%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 132 27% 8%;
+
+  --primary: 115 38% 32%;
+  /* #3B6F32 - Dark Green Accent */
+  --primary-foreground: 80 14% 98%;
+
+  --secondary: 100 10% 90%;
+  --secondary-foreground: 112 11% 32%;
+  /* #4A5A48 */
+
+  --muted: 100 10% 92%;
+  --muted-foreground: 112 11% 32%;
+
+  --accent: 115 38% 32%;
+  --accent-foreground: 80 14% 98%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 0 0% 0% / 0.08;
+  --input: 100 10% 90%;
+  --ring: 115 38% 32%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15.5px;
+  line-height: 1.5;
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+.h1 {
+  @apply text-h1 font-semibold uppercase tracking-tight;
+}
+
+h2,
+.h2 {
+  @apply text-h2 font-semibold uppercase tracking-tight;
+}
+
+h3,
+.h3 {
+  @apply text-section font-medium uppercase tracking-wide;
+}
+
+/* Unified Layout Components */
+.page-header {
+  @apply flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6;
+}
+
+.page-title-group {
+  @apply space-y-1;
+}
+
+.page-title {
+  @apply text-h1 font-bold uppercase tracking-tight text-foreground;
+}
+
+.page-subtitle {
+  @apply text-small text-muted-foreground uppercase tracking-[0.2em] font-medium;
+}
+
+/* Unified Button Styles */
+.btn-primary {
+  @apply flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-md text-small font-black uppercase tracking-widest transition-all active:scale-95 shadow-sm;
+}
+
+.btn-secondary {
+  @apply flex items-center gap-2 bg-muted hover:bg-border text-foreground px-4 py-2 rounded-md text-small font-black uppercase tracking-widest transition-all active:scale-95 border border-border;
+}
+
+.btn-ghost {
+  @apply flex items-center gap-2 hover:bg-muted text-muted-foreground hover:text-foreground px-3 py-1.5 rounded-md text-small font-bold uppercase tracking-widest transition-all;
+}
+
+.btn-icon {
+  @apply p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors;
+}
+
+/* Unified Card & List Styles */
+.card-container {
+  @apply bg-card border border-border rounded-md overflow-hidden shadow-sm;
+}
+
+.data-table {
+  @apply w-full text-left border-collapse;
+}
+
+.data-table-thead {
+  @apply bg-muted/30 border-b border-border;
+}
+
+.data-table-th {
+  @apply p-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap;
+}
+
+.data-table-tr {
+  @apply hover:bg-muted/50 transition-colors;
+}
+
+.data-table-td {
+  @apply p-4 text-small font-medium text-foreground;
+}
+
+/* Unified Status Badges */
+.status-badge {
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 border rounded-full text-[10px] font-black uppercase tracking-widest;
+}
+
+.status-badge-approved {
+  @apply bg-primary/20 text-primary border-primary/30 shadow-[0_0_10px_hsl(var(--primary)/0.1)];
+}
+
+.status-badge-pending {
+  @apply bg-yellow-500/20 text-yellow-500 border-yellow-500/30;
+}
+
+.status-badge-rejected {
+  @apply bg-destructive/20 text-destructive border-destructive/30;
+}
+
+.status-badge-draft {
+  @apply bg-muted text-muted-foreground border-border;
+}
+
+.status-badge-info {
+  @apply bg-blue-500/20 text-blue-400 border-blue-500/30;
+}
+
+/* Scrollbar Style */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary/20 rounded-full hover:bg-primary/40 transition-colors;
+}
+
+/* Utilities */
+.glass {
+  background: hsl(var(--card) / 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border));
+}
+
+.text-gradient {
+  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--foreground)));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}

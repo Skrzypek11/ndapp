@@ -1,0 +1,75 @@
+/* Roster specific styles - inheriting global vars */
+.container {
+    background: rgba(36, 48, 33, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(90, 140, 67, 0.3);
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.th {
+    text-align: left;
+    padding: 1rem;
+    background: rgba(26, 36, 24, 0.8);
+    color: hsl(var(--primary));
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 2px solid rgba(90, 140, 67, 0.4);
+}
+
+.td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(61, 77, 56, 0.3);
+    color: hsl(var(--foreground));
+}
+
+.tr:last-child .td {
+    border-bottom: none;
+}
+
+.tr:hover {
+    background: rgba(90, 140, 67, 0.1);
+}
+
+.badge {
+    background: rgba(15, 23, 42, 0.4);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.125rem;
+    border: 1px solid var(--border);
+    font-family: monospace;
+}
+
+.roleTag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 999px;
+    background: rgba(90, 140, 67, 0.2);
+    color: hsl(var(--primary));
+    border: 1px solid rgba(90, 140, 67, 0.4);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
