@@ -36,7 +36,7 @@ export default function DashboardPage() {
         const fetchData = async () => {
             const allCases = CaseStore.getAll()
             const allReports = ReportStore.getAll()
-            const allAnnouncements = await getAnnouncements(session.user.id)
+            const allAnnouncements = await getAnnouncements()
             const allActivities = ActivityStore.getAll()
             const allUsers = await getUsers()
 
