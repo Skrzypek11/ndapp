@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useState, useEffect } from "react"
+import { Suspense, use, useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Briefcase, ChevronLeft } from "lucide-react"
@@ -9,6 +9,14 @@ import CaseForm from "@/components/cases/CaseForm"
 import { useTranslation } from "@/lib/i18n"
 
 export default function CreateCasePage() {
+    return (
+        <Suspense fallback={<div className="p-12 text-center text-muted-foreground">Loading interface...</div>}>
+            <CreateCaseContent />
+        </Suspense>
+    )
+}
+
+function CreateCaseContent() {
     const { data: session } = useSession()
     const { dict } = useTranslation()
     const router = useRouter()
