@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, use } from "react"
+import { Suspense, useState, useEffect, use } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import dynamic from "next/dynamic"
@@ -22,6 +22,14 @@ import MarkerEditModal from "@/components/reports/MarkerEditModal"
 import ShapeEditModal from "@/components/reports/ShapeEditModal"
 
 export default function CreateReportPage() {
+    return (
+        <Suspense fallback={<div className="p-12 text-center text-muted-foreground">Loading report editor...</div>}>
+            <CreateReportContent />
+        </Suspense>
+    )
+}
+
+function CreateReportContent() {
     const { data: session } = useSession()
     const { dict } = useTranslation()
     const router = useRouter()
