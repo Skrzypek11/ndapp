@@ -156,6 +156,7 @@ export const en = {
             narrative_placeholder: "Incident details...",
             map_title: "Tactical Operations Map",
             map_hint: "Click map to deploy intel markers.",
+            scene_map: "Tactical Map",
             evidence: "Evidence Locker"
         },
         list: {
@@ -604,6 +605,7 @@ export const pl = {
             narrative_placeholder: "Szczegóły incydentu...",
             map_title: "Mapa Taktyczno-Operacyjna",
             map_hint: "Kliknij mapę, aby rozmieścić znaczniki wywiadowcze.",
+            scene_map: "Mapa Taktyczna",
             evidence: "Szafka Dowodowa"
         },
         list: {
