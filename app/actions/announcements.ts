@@ -136,3 +136,23 @@ export async function getUnreadCount() {
         return 0;
     }
 }
+
+export async function deleteAnnouncement(id: string) {
+    const user = await getServerUser();
+    if (!user) return { success: false, error: "Unauthorized" };
+
+    const isAdmin = user.rank?.systemRole === 'ADMIN' || user.rank?.systemRole === 'ROOT';
+    if (!isAdmin) return { success: false, error: "Administrative privileges required" };
+
+    try {
+        await prisma.announcement.delete({
+            where: { id }
+        });
+        revalidatePath("/dashboard");
+        revalidatePath("/dashboard/announcements");
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to delete announcement:", error);
+        return { success: false, error: "Database error" };
+    }
+}

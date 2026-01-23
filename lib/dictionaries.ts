@@ -282,8 +282,13 @@ export const en = {
         },
         read_tracking: {
             title: "Read Receipts",
-            confirmed: "Confirmed Read"
-        }
+            confirmed: "Confirmed Read",
+            read_by: "Read By",
+            loading: "Loading readers...",
+            no_reads: "No reads yet"
+        },
+        delete: "Delete Announcement",
+        delete_confirm: "Are you sure you want to delete this announcement?"
     },
     kompendium: {
         title: "Division Kompendium",
@@ -731,8 +736,13 @@ export const pl = {
         },
         read_tracking: {
             title: "Potwierdzenia odczytania",
-            confirmed: "Potwierdzono odczyt"
-        }
+            confirmed: "Potwierdzono odczyt",
+            read_by: "Przeczytane przez",
+            loading: "Ładowanie listy...",
+            no_reads: "Brak odczytów"
+        },
+        delete: "Usuń Ogłoszenie",
+        delete_confirm: "Czy na pewno chcesz usunąć to ogłoszenie?"
     },
     kompendium: {
         title: "Kompendium Jednostki",
