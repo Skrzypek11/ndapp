@@ -122,8 +122,74 @@ export default function RosterTable({ users }: RosterTableProps) {
                 </div>
             </div>
 
-            {/* Table */}
-            <div className="card-container">
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4">
+                {filteredUsers.length > 0 ? (
+                    filteredUsers.map(user => (
+                        <div
+                            key={user.id}
+                            onClick={() => openProfile(user.id)}
+                            className="bg-card border border-border rounded-lg p-5 shadow-sm active:scale-[0.98] transition-all relative overflow-hidden"
+                        >
+                            <div className="flex items-start justify-between mb-4">
+                                <div className="flex items-center gap-4">
+                                    <div className="relative">
+                                        {user.avatarUrl ? (
+                                            <img src={user.avatarUrl} className="w-12 h-12 object-cover rounded-full border-2 border-border" alt="" />
+                                        ) : (
+                                            <div
+                                                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-border text-sm font-black text-foreground"
+                                                style={{ backgroundColor: getAvatarColor(user.rpName) + "20" }}
+                                            >
+                                                {getInitials(user.rpName)}
+                                            </div>
+                                        )}
+                                        <div
+                                            className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-background"
+                                            style={{ backgroundColor: getStatusColor(user.status) }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-small font-black uppercase tracking-tight text-foreground leading-none mb-1">{user.rpName}</h3>
+                                        <div className="flex items-center gap-2 text-primary font-mono text-[11px] font-bold">
+                                            <BadgeCheck size={12} /> {user.badgeNumber}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded bg-muted/50 text-muted-foreground">
+                                    {user.rank.name}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 border-t border-border/50 pt-3">
+                                <div className="space-y-1">
+                                    <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest block">Status</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: getStatusColor(user.status) }}>
+                                        {user.status === 'Active' ? dict.roster.status_types.active.split(' / ')[0] : user.status}
+                                    </span>
+                                </div>
+                                <div className="space-y-1 text-right">
+                                    <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest block">Contact</span>
+                                    <div className="flex items-center justify-end gap-1 text-[10px] font-mono font-bold text-foreground">
+                                        {user.phoneNumber ? (
+                                            <><Phone size={10} className="text-primary" /> {user.phoneNumber}</>
+                                        ) : (
+                                            <span className="text-muted-foreground/50">-</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="p-12 text-center text-small text-muted-foreground uppercase tracking-[0.2em] font-black italic bg-muted/10 rounded-lg border border-border border-dashed">
+                        {dict.roster.no_results}
+                    </div>
+                )}
+            </div>
+
+            {/* Desktop Table */}
+            <div className="card-container hidden md:block">
                 <div className="overflow-x-auto">
                     <table className="data-table">
                         <thead className="data-table-thead">

@@ -32,10 +32,17 @@
 
 .main {
     flex: 1;
-    padding: 2rem;
-    margin-left: 280px;
-    /* Sidebar width */
+    padding: 1rem;
+    /* Reduced from 2rem for mobile base */
     position: relative;
     z-index: 1;
     overflow-y: auto;
+    width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .main {
+        margin-left: 280px;
+        padding: 2rem;
+    }
 }

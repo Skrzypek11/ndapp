@@ -102,7 +102,60 @@ export default function ReportsListPage() {
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="data-table">
+                        {/* Mobile Card View */}
+                        <div className="md:hidden space-y-4">
+                            {reports.slice(0, 10).map((report) => {
+                                const isApproved = report.status === 'APPROVED'
+                                const statusKey = report.status.toLowerCase().replace(/_/g, '')
+                                return (
+                                    <div key={report.id} className="bg-card border border-border rounded-lg p-5 shadow-sm active:scale-[0.98] transition-all">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <span className="text-mono-data text-primary/70 font-bold text-[10px]">{report.reportNumber}</span>
+                                            <span className={`status-badge ${report.status === 'APPROVED' ? 'status-badge-approved' :
+                                                report.status === 'SUBMITTED' ? 'status-badge-pending' :
+                                                    report.status === 'REVISIONS_REQUIRED' ? 'status-badge-rejected' : 'status-badge-draft'
+                                                }`}>
+                                                {dict.reports.status[statusKey as keyof typeof dict.reports.status] || report.status.replace(/_/g, ' ')}
+                                            </span>
+                                        </div>
+                                        <div className="mb-4">
+                                            <h3 className="text-small font-bold uppercase tracking-wide text-foreground leading-tight mb-1">{report.title}</h3>
+                                            <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium">BY {report.authorName}</div>
+                                        </div>
+                                        <div className="flex items-center justify-between border-t border-border/50 pt-3 gap-3">
+                                            <Link
+                                                href={`/dashboard/reports/${report.id}`}
+                                                className="btn-secondary !px-3 !py-1.5 !text-[10px] flex-1 justify-center"
+                                            >
+                                                <Eye size={12} />
+                                                {dict.reports.list.view}
+                                            </Link>
+                                            <button
+                                                disabled={!isApproved || exportingId === report.id}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleExport(report);
+                                                }}
+                                                className={`flex items-center justify-center gap-1.5 px-3 py-1.5 border rounded text-[10px] font-black uppercase tracking-widest transition-all flex-1 ${isApproved
+                                                    ? "bg-muted border-border text-foreground hover:bg-border cursor-pointer shadow-sm active:scale-95"
+                                                    : "bg-muted/50 border-border/50 text-muted-foreground/30 cursor-not-allowed"
+                                                    }`}
+                                            >
+                                                {exportingId === report.id ? (
+                                                    <span className="w-3 h-3 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+                                                ) : (
+                                                    <FileDown size={12} />
+                                                )}
+                                                {exportingId === report.id ? "..." : "PDF"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+
+                        {/* Desktop Table View */}
+                        <table className="data-table hidden md:table">
                             <thead className="data-table-thead">
                                 <tr>
                                     <th className="data-table-th">{dict.reports.table.report_number}</th>

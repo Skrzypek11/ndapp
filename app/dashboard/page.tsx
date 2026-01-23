@@ -83,8 +83,8 @@ export default function DashboardPage() {
     return (
         <div className="animate-fade-in space-y-10 pb-12">
             {/* Header */}
-            <header className="page-header bg-card border border-border p-8 rounded-md shadow-2xl backdrop-blur-md bg-opacity-95 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+            <header className="page-header bg-card border border-border p-4 md:p-8 rounded-md shadow-2xl backdrop-blur-md bg-opacity-95 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity hidden md:block">
                     <Terminal size={120} className="text-primary rotate-12" />
                 </div>
 
@@ -125,8 +125,8 @@ export default function DashboardPage() {
                     { label: dict.dashboard.stats.closed_cases, value: stats.closedCases, icon: CheckCircle, color: "text-green-500", bg: "bg-green-500/5" },
                     ...(isAdmin ? [{ label: dict.dashboard.stats.pending_closure, value: stats.pendingClosure, icon: Shield, color: "text-amber-500", bg: "bg-amber-500/5" }] : [])
                 ].map((stat, i) => (
-                    <div key={i} className={`bg-card border border-border p-7 rounded-md relative overflow-hidden group hover:border-primary/40 transition-all hover:translate-y-[-4px] shadow-xl hover:shadow-primary/10`}>
-                        <div className="flex items-center justify-between mb-6">
+                    <div key={i} className={`bg-card border border-border p-5 md:p-7 rounded-md relative overflow-hidden group hover:border-primary/40 transition-all hover:translate-y-[-4px] shadow-xl hover:shadow-primary/10`}>
+                        <div className="flex items-center justify-between mb-4 md:mb-6">
                             <div className={`flex items-center gap-3 ${stat.color} font-black text-[12px] uppercase tracking-[0.2em]`}>
                                 <stat.icon size={16} />
                                 {stat.label}
@@ -135,7 +135,7 @@ export default function DashboardPage() {
                                 <stat.icon size={44} />
                             </div>
                         </div>
-                        <div className="text-h1 text-foreground transition-all group-hover:tracking-tighter font-black">{stat.value}</div>
+                        <div className="text-4xl md:text-h1 text-foreground transition-all group-hover:tracking-tighter font-black">{stat.value}</div>
                         <div className="absolute bottom-0 left-0 h-1 bg-primary/40 w-0 group-hover:w-full transition-all duration-700 ease-in-out"></div>
                     </div>
                 ))}
@@ -161,7 +161,7 @@ export default function DashboardPage() {
                         <div className="divide-y divide-border">
                             {userCases.length > 0 ? (
                                 userCases.map(c => (
-                                    <Link key={c.id} href={`/dashboard/cases/${c.id}`} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-primary/5 transition-all group/item gap-6 relative overflow-hidden">
+                                    <Link key={c.id} href={`/dashboard/cases/${c.id}`} className="p-4 md:p-6 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-primary/5 transition-all group/item gap-4 md:gap-6 relative overflow-hidden">
                                         <div className="flex items-center gap-6 relative z-10">
                                             <div className="shrink-0 w-12 h-12 bg-muted border border-border rounded-lg flex items-center justify-center text-primary group-hover/item:border-primary/40 group-hover/item:bg-primary/5 transition-all shadow-sm">
                                                 <Briefcase size={24} />
@@ -215,7 +215,7 @@ export default function DashboardPage() {
                         <div className="divide-y divide-border">
                             {userReports.length > 0 ? (
                                 userReports.map(r => (
-                                    <Link key={r.id} href={`/dashboard/reports/${r.id}`} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-primary/5 transition-all group/item gap-6 relative overflow-hidden">
+                                    <Link key={r.id} href={`/dashboard/reports/${r.id}`} className="p-4 md:p-6 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-primary/5 transition-all group/item gap-4 md:gap-6 relative overflow-hidden">
                                         <div className="flex items-center gap-6 relative z-10">
                                             <div className="shrink-0 w-12 h-12 bg-muted border border-border rounded-lg flex items-center justify-center text-primary group-hover/item:border-primary/40 group-hover/item:bg-primary/5 transition-all shadow-sm">
                                                 <FileText size={24} />

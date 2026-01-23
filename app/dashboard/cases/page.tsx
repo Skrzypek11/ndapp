@@ -117,7 +117,44 @@ export default function CasesListPage() {
                         </div>
                     ) : (
                         <>
-                            <table className="data-table">
+                            {/* Mobile Card View (Visible on small screens) */}
+                            <div className="md:hidden space-y-4">
+                                {cases.map((c) => {
+                                    const statusKey = c.status.toLowerCase().replace(/_/g, '')
+                                    return (
+                                        <Link key={c.id} href={`/dashboard/cases/${c.id}`} className="block bg-card border border-border rounded-lg p-5 shadow-sm active:scale-[0.98] transition-all">
+                                            <div className="flex items-center justify-between mb-3">
+                                                <span className="text-mono-data text-primary px-2 py-0.5 bg-primary/10 rounded border border-primary/20 text-[10px] font-black tracking-tight">
+                                                    {c.caseId}
+                                                </span>
+                                                <span className={`status-badge ${c.status === 'CLOSED' ? 'status-badge-approved' :
+                                                    c.status === 'SUBMITTED' || c.status === 'PENDING_CLOSURE' ? 'status-badge-pending' :
+                                                        c.status === 'RETURNED' ? 'status-badge-rejected' :
+                                                            c.status === 'DRAFT' ? 'status-badge-draft' : 'status-badge-info'
+                                                    }`}>
+                                                    {dict.cases.status[statusKey as keyof typeof dict.cases.status] || c.status.replace(/_/g, ' ')}
+                                                </span>
+                                            </div>
+                                            <div className="mb-4">
+                                                <h3 className="text-small font-black uppercase tracking-tight text-foreground leading-tight mb-1">{c.title}</h3>
+                                                <div className="flex items-center gap-2 text-muted-foreground">
+                                                    <Shield size={12} className="opacity-50" />
+                                                    <span className="text-[10px] font-bold uppercase tracking-widest">{c.leadInvestigator?.rpName || 'Unassigned'}</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center justify-between text-[10px] text-muted-foreground/60 font-mono font-bold uppercase tracking-wider border-t border-border/50 pt-3">
+                                                <span>Submitted: {c.submittedAt ? new Date(c.submittedAt).toLocaleDateString() : "---"}</span>
+                                                <div className="flex items-center gap-1 text-primary">
+                                                    View Details <ChevronRight size={12} />
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    )
+                                })}
+                            </div>
+
+                            {/* Desktop Table View (Hidden on small screens) */}
+                            <table className="data-table hidden md:table">
                                 <thead className="data-table-thead">
                                     <tr>
                                         <th className="data-table-th">{dict.cases.table.case_id}</th>
