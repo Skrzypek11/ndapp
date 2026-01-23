@@ -65,23 +65,27 @@ export default function ReportView({ report: initialReport, isReview = false }: 
         }
     }
 
-    const handleProcessReview = () => {
+    const handleProcessReview = async () => {
         if (!session?.user || !action) return
         if (action === 'reject' && !rejectionReason) return alert(dict.reports.review_panel.confirm_error)
 
         try {
-            const updated = ReportStore.reviewAction(
+            const { reviewReport } = await import('@/app/actions/reports')
+            const res = await reviewReport(
                 report.id,
                 action,
-                session.user.id,
                 action === 'reject' ? rejectionReason : undefined
             )
-            if (updated) {
-                setReport(updated)
+
+            if (res.success) {
                 router.push("/dashboard/reports")
+                router.refresh()
+            } else {
+                alert("Review failed: " + res.error)
             }
         } catch (e) {
             alert("Error processing review")
+            console.error(e)
         }
     }
 

@@ -200,3 +200,30 @@ export async function deleteReport(id: string) {
         return { success: false, error: "Failed to delete report" }
     }
 }
+
+export async function reviewReport(id: string, action: 'approve' | 'reject', rejectionReason?: string) {
+    const user = await getServerUser()
+    if (!user) return { success: false, error: "Unauthorized" }
+
+    const isAdmin = user.rank?.systemRole === 'ADMIN' || user.rank?.systemRole === 'ROOT'
+    if (!isAdmin) return { success: false, error: "Administrative privileges required" }
+
+    try {
+        const status = action === 'approve' ? 'APPROVED' : 'REVISIONS_REQUIRED'
+
+        await prisma.report.update({
+            where: { id },
+            data: {
+                status,
+                reviewerId: user.id,
+                // rejectionReason is not in schema yet, skipping persistence for now
+            }
+        })
+        revalidatePath("/dashboard/reports")
+        revalidatePath(`/dashboard/reports/${id}`)
+        return { success: true }
+    } catch (error) {
+        console.error("Review Report Error:", error)
+        return { success: false, error: "Failed to process review" }
+    }
+}
