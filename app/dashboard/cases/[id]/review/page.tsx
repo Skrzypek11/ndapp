@@ -4,37 +4,47 @@ import { use, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Shield, CheckCircle, AlertTriangle, ArrowLeft, Activity, Lock, Terminal } from "lucide-react"
-import { Case, CaseStore } from "@/lib/store/cases"
+import { Case } from "@/lib/store/cases"
 import CaseView from "@/components/cases/CaseView"
 import { useTranslation } from "@/lib/i18n"
-
-const MOCK_AGENTS = [
-    { id: "1", name: "Agent John Smith" },
-    { id: "2", name: "Agent Jane Doe" },
-    { id: "3", name: "Sgt. Mike Ross" },
-    { id: "4", name: "Det. Sarah Miller" },
-    { id: "5", name: "Ofc. Tom Hardy" },
-]
+import { getCaseById, updateCaseStatus, updateCase } from "@/app/actions/cases"
+import { getUsers } from "@/app/actions/user"
 
 export default function ReviewCasePage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params)
     const { data: session } = useSession()
     const { dict } = useTranslation()
     const router = useRouter()
-    const [caseData, setCaseData] = useState<Case | null>(null)
+    const [caseData, setCaseData] = useState<any>(null)
     const [leadInvestigatorId, setLeadInvestigatorId] = useState("")
+    const [agents, setAgents] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (id) {
-            const data = CaseStore.getById(id)
-            if (data) {
-                setCaseData(data)
-                setLeadInvestigatorId(data.leadInvestigatorId)
+        const loadData = async () => {
+            if (id) {
+                try {
+                    const [fetchedCase, fetchedUsers] = await Promise.all([
+                        getCaseById(id),
+                        getUsers()
+                    ])
+
+                    if (fetchedCase) {
+                        setCaseData(fetchedCase)
+                        setLeadInvestigatorId(fetchedCase.leadInvestigatorId || "")
+                    }
+                    setAgents(fetchedUsers)
+                } catch (error) {
+                    console.error("Failed to load review data", error)
+                } finally {
+                    setLoading(false)
+                }
             }
         }
+        loadData()
     }, [id])
 
-    if (!caseData) return (
+    if (loading) return (
         <div className="p-8 flex items-center justify-center h-[60vh]">
             <div className="flex flex-col items-center gap-4 text-center">
                 <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
@@ -64,21 +74,44 @@ export default function ReviewCasePage({ params }: { params: Promise<{ id: strin
         )
     }
 
-    const handleApprove = () => {
-        const lead = MOCK_AGENTS.find(a => a.id === leadInvestigatorId)
-        if (!lead) return alert(dict.cases.review.alert_valid_lead)
+    const handleApprove = async () => {
+        if (!leadInvestigatorId) return alert(dict.cases.review.alert_valid_lead)
 
-        CaseStore.assign(caseData.id, lead.id, lead.name)
-        router.push("/dashboard/cases")
-    }
+        try {
+            // First update lead investigator
+            // Then approve case essentially by setting status to ASSIGNED (or whatever the next step is)
+            // Assuming assigning a lead automatically moves it or we do it explicitly. 
+            // Based on UI flow: Approve -> Assign Lead -> Case Active.
 
-    const handleReturn = () => {
-        const reason = prompt(dict.reports.review_panel.comments_placeholder)
-        if (reason) {
-            CaseStore.returnForRevisions(caseData.id, reason)
+            // We use updateCase to set the lead
+            await updateCase(caseData.id, { leadInvestigatorId })
+
+            // Then set status to ASSIGNED
+            await updateCaseStatus(caseData.id, 'ASSIGNED')
+
             router.push("/dashboard/cases")
+            router.refresh()
+        } catch (error) {
+            console.error("Approval failed", error)
+            alert("Failed to approve case")
         }
     }
+
+    const handleReturn = async () => {
+        const reason = prompt(dict.reports.review_panel.comments_placeholder)
+        if (reason) {
+            try {
+                await updateCaseStatus(caseData.id, 'RETURNED', { rejectionReason: reason })
+                router.push("/dashboard/cases")
+                router.refresh()
+            } catch (error) {
+                console.error("Return failed", error)
+                alert("Failed to return case")
+            }
+        }
+    }
+
+    if (!caseData) return null
 
     return (
         <div className="animate-fade-in space-y-8 pb-12">
@@ -119,8 +152,11 @@ export default function ReviewCasePage({ params }: { params: Promise<{ id: strin
                                 onChange={(e) => setLeadInvestigatorId(e.target.value)}
                             >
                                 <option value="" className="bg-card">{dict.cases.review.select_agent}</option>
-                                {MOCK_AGENTS.map(agent => (
-                                    <option key={agent.id} value={agent.id} className="bg-card">{agent.name}</option>
+                                {agents.map(agent => (
+                                    <option key={agent.id} value={agent.id} className="bg-card">
+                                        {agent.badgeNumber ? `${agent.badgeNumber} - ` : ''}
+                                        {agent.rpName || agent.email}
+                                    </option>
                                 ))}
                             </select>
                         </div>

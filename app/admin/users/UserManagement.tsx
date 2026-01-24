@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { createUser } from "@/app/actions/user"
-import { UserPlus, X, Shield, Activity, Users, Search, Filter, ArrowLeft } from "lucide-react"
+import { createUser, updateOfficerProfile } from "@/app/actions/user"
+import { UserPlus, X, Shield, Activity, Users, Search, Filter, ArrowLeft, Edit, Save } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTranslation } from "@/lib/i18n"
 
@@ -11,6 +11,27 @@ export default function UserManagement({ users, ranks }: { users: any[], ranks: 
     const [showForm, setShowForm] = useState(false)
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+
+    // Edit State
+    const [editingUser, setEditingUser] = useState<any>(null)
+
+    const handleUpdate = async (formData: FormData) => {
+        if (!editingUser) return
+        setLoading(true)
+
+        const data: any = {}
+        formData.forEach((value, key) => data[key] = value)
+
+        const res = await updateOfficerProfile(editingUser.id, data)
+        setLoading(false)
+
+        if (res.success) {
+            setEditingUser(null)
+            router.refresh()
+        } else {
+            alert(res.error)
+        }
+    }
 
     const handleCreate = async (formData: FormData) => {
         setLoading(true)
@@ -135,6 +156,82 @@ export default function UserManagement({ users, ranks }: { users: any[], ranks: 
                 </div>
             )}
 
+            {/* Edit Modal */}
+            {editingUser && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setEditingUser(null)} />
+                    <div className="relative w-full max-w-4xl bg-card border border-border shadow-2xl rounded-lg overflow-hidden animate-scale-in flex flex-col max-h-[90vh]">
+                        <div className="p-6 border-b border-border bg-muted/20 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <Edit size={18} className="text-primary" />
+                                <h2 className="text-small font-black uppercase tracking-[0.2em] text-foreground">Edit Officer Profile</h2>
+                            </div>
+                            <button onClick={() => setEditingUser(null)} className="text-muted-foreground hover:text-foreground transition-colors">
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className="overflow-y-auto p-8">
+                            <form id="edit-form" action={handleUpdate} className="space-y-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-2 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground pl-1">Rank</label>
+                                        <select name="rankId" defaultValue={editingUser.rankId} className="w-full bg-muted/20 border border-border rounded px-4 py-3 text-small font-bold text-foreground focus:outline-none focus:border-primary focus:bg-muted/40 transition-all appearance-none cursor-pointer uppercase tracking-tight">
+                                            {ranks.map(r => (
+                                                <option key={r.id} value={r.id}>{r.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground pl-1">Badge Number</label>
+                                        <input name="badgeNumber" defaultValue={editingUser.badgeNumber} className="w-full bg-muted/20 border border-border rounded px-4 py-3 text-small font-bold text-foreground focus:outline-none focus:border-primary focus:bg-muted/40 transition-all font-mono" />
+                                    </div>
+                                    <div className="space-y-2 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground pl-1">First Name</label>
+                                        <input name="firstName" defaultValue={editingUser.firstName} className="w-full bg-muted/20 border border-border rounded px-4 py-3 text-small font-bold text-foreground focus:outline-none focus:border-primary focus:bg-muted/40 transition-all" />
+                                    </div>
+                                    <div className="space-y-2 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground pl-1">Last Name</label>
+                                        <input name="lastName" defaultValue={editingUser.lastName} className="w-full bg-muted/20 border border-border rounded px-4 py-3 text-small font-bold text-foreground focus:outline-none focus:border-primary focus:bg-muted/40 transition-all" />
+                                    </div>
+                                    <div className="space-y-2 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground pl-1">Email</label>
+                                        <input name="email" defaultValue={editingUser.email} className="w-full bg-muted/20 border border-border rounded px-4 py-3 text-small font-bold text-foreground focus:outline-none focus:border-primary focus:bg-muted/40 transition-all" />
+                                    </div>
+                                    <div className="space-y-2 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground pl-1">Phone</label>
+                                        <input name="phoneNumber" defaultValue={editingUser.phoneNumber} className="w-full bg-muted/20 border border-border rounded px-4 py-3 text-small font-bold text-foreground focus:outline-none focus:border-primary focus:bg-muted/40 transition-all" />
+                                    </div>
+                                    <div className="space-y-2 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground pl-1">Unit Assignment</label>
+                                        <input name="unitAssignment" defaultValue={editingUser.unitAssignment} className="w-full bg-muted/20 border border-border rounded px-4 py-3 text-small font-bold text-foreground focus:outline-none focus:border-primary focus:bg-muted/40 transition-all" />
+                                    </div>
+                                    <div className="space-y-2 group">
+                                        <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground pl-1">Status</label>
+                                        <select name="status" defaultValue={editingUser.status} className="w-full bg-muted/20 border border-border rounded px-4 py-3 text-small font-bold text-foreground focus:outline-none focus:border-primary focus:bg-muted/40 transition-all appearance-none cursor-pointer uppercase tracking-tight">
+                                            <option value="Active">Active</option>
+                                            <option value="Leave">On Leave</option>
+                                            <option value="Rest">Resting</option>
+                                            <option value="Suspended">Suspended</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div className="p-6 border-t border-border bg-muted/10 flex justify-end gap-3">
+                            <button type="button" onClick={() => setEditingUser(null)} className="px-6 py-3 bg-transparent border border-border text-muted-foreground text-[10px] font-black uppercase tracking-widest rounded hover:bg-muted/50 transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit" form="edit-form" disabled={loading} className="btn-primary !px-8 !py-3">
+                                {loading ? <div className="w-4 h-4 border-2 border-primary-foreground/20 border-t-primary-foreground rounded-full animate-spin" /> : <Save size={14} />}
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Assets Table */}
             <div className="card-container">
                 <div className="bg-muted/20 border-b border-border p-4 flex items-center justify-between">
@@ -152,6 +249,7 @@ export default function UserManagement({ users, ranks }: { users: any[], ranks: 
                                 <th className="data-table-th">{dict.admin.users.table.rank}</th>
                                 <th className="data-table-th">{dict.admin.users.table.role}</th>
                                 <th className="data-table-th">{dict.admin.users.table.contact}</th>
+                                <th className="data-table-th text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
@@ -192,6 +290,11 @@ export default function UserManagement({ users, ranks }: { users: any[], ranks: 
                                             <span className="text-[11px] font-semibold text-foreground/70 uppercase tracking-tight">{user.email}</span>
                                             {user.phoneNumber && <span className="text-[9px] text-muted-foreground font-mono">{user.phoneNumber}</span>}
                                         </div>
+                                    </td>
+                                    <td className="data-table-td text-right">
+                                        <button onClick={() => setEditingUser(user)} className="p-2 text-muted-foreground hover:text-primary transition-colors hover:bg-primary/10 rounded">
+                                            <Edit size={16} />
+                                        </button>
                                     </td>
                                 </tr>
                             ))}

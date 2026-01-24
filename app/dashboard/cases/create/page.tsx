@@ -40,22 +40,30 @@ function CreateCaseContent() {
         if (!session?.user) return
         setLoading(true)
         try {
+            let result;
             if (editId) {
-                await updateCase(editId, {
+                result = await updateCase(editId, {
                     ...formData,
-                    participantIds: formData.participants
+                    participantIds: formData.participants,
+                    leadInvestigatorId: formData.leadInvestigatorId || session.user.id
                 })
             } else {
-                await createCase({
+                result = await createCase({
                     ...formData,
                     reportingOfficerId: session.user.id,
-                    participantIds: formData.participants
+                    participantIds: formData.participants,
+                    leadInvestigatorId: formData.leadInvestigatorId || session.user.id
                 })
             }
-            router.push("/dashboard/cases")
+
+            if (result.success) {
+                router.push("/dashboard/cases")
+            } else {
+                alert(result.error || "Failed to save case dossier")
+            }
         } catch (e) {
             console.error(e)
-            alert("Failed to save case dossier")
+            alert("An unexpected error occurred")
         } finally {
             setLoading(false)
         }

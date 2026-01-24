@@ -5,7 +5,7 @@ import { Modal } from "@/components/ui/Modal"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { PhotoEvidence, Marker } from "@/lib/store/reports"
-import { MOCK_AGENTS } from "./CoAuthorSelect"
+import { getUsers } from "@/app/actions/user"
 import { Camera, User, Users, Clock, Link as LinkIcon, Upload, X } from "lucide-react"
 
 interface PhotoEvidenceModalProps {
@@ -14,6 +14,12 @@ interface PhotoEvidenceModalProps {
     onSave: (evidence: PhotoEvidence) => void
     initialData?: PhotoEvidence | null
     availableMarkers: Marker[]
+}
+
+interface Agent {
+    id: string
+    name: string
+    badge: string
 }
 
 export default function PhotoEvidenceModal({
@@ -36,6 +42,24 @@ export default function PhotoEvidenceModal({
     const [fileUrl, setFileUrl] = useState("")
     const [fileName, setFileName] = useState("")
     const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+    const [agents, setAgents] = useState<Agent[]>([])
+
+    useEffect(() => {
+        const fetchAgents = async () => {
+            try {
+                const users = await getUsers()
+                const formattedAgents = users.map((u: any) => ({
+                    id: u.id,
+                    name: u.rpName || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
+                    badge: u.badgeNumber || "N/A"
+                }))
+                setAgents(formattedAgents)
+            } catch (error) {
+                console.error("Failed to fetch agents", error)
+            }
+        }
+        fetchAgents()
+    }, [])
 
     useEffect(() => {
         if (initialData) {
@@ -78,10 +102,21 @@ export default function PhotoEvidenceModal({
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0]
-            const url = URL.createObjectURL(file)
-            setPreviewUrl(url)
-            setFileUrl(url) // Mock
-            setFileName(file.name)
+
+            // Limit file size (e.g., 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert("File too large. Max 5MB.")
+                return
+            }
+
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                const base64 = reader.result as string
+                setPreviewUrl(base64)
+                setFileUrl(base64)
+                setFileName(file.name)
+            }
+            reader.readAsDataURL(file)
         }
     }
 
@@ -206,7 +241,7 @@ export default function PhotoEvidenceModal({
                                     className="w-full bg-slate-900 border border-border rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary/50 font-mono"
                                 >
                                     <option value="">Select Officer...</option>
-                                    {MOCK_AGENTS.map(agent => (
+                                    {agents.map(agent => (
                                         <option key={agent.id} value={agent.id}>{agent.badge} - {agent.name}</option>
                                     ))}
                                 </select>

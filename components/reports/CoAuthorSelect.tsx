@@ -1,20 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Users, Search, Check, Plus } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { Modal } from "@/components/ui/Modal"
 import { Input } from "@/components/ui/Input"
 import { Chip } from "@/components/ui/Chip"
+import { getUsers } from "@/app/actions/user"
 
-// Mock Agent Data (Ideally move to lib/mocks.ts)
-export const MOCK_AGENTS = [
-    { id: "1", name: "Agent John Smith", badge: "ND-001" },
-    { id: "2", name: "Agent Jane Doe", badge: "ND-002" },
-    { id: "3", name: "Sgt. Mike Ross", badge: "ND-S-01" },
-    { id: "4", name: "Det. Sarah Miller", badge: "ND-D-05" },
-    { id: "5", name: "Ofc. Tom Hardy", badge: "ND-PO-12" },
-]
+interface Agent {
+    id: string
+    name: string
+    badge: string
+}
 
 interface CoAuthorSelectProps {
     selectedIds: string[]
@@ -24,6 +22,29 @@ interface CoAuthorSelectProps {
 export default function CoAuthorSelect({ selectedIds, onChange }: CoAuthorSelectProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [search, setSearch] = useState("")
+    const [agents, setAgents] = useState<Agent[]>([])
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        const fetchAgents = async () => {
+            setLoading(true)
+            try {
+                const users = await getUsers()
+                const formattedAgents = users.map((u: any) => ({
+                    id: u.id,
+                    name: u.rpName || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
+                    badge: u.badgeNumber || "N/A"
+                }))
+                setAgents(formattedAgents)
+            } catch (error) {
+                console.error("Failed to fetch agents", error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchAgents()
+    }, [])
 
     const toggleSelection = (id: string) => {
         if (selectedIds.includes(id)) {
@@ -33,8 +54,8 @@ export default function CoAuthorSelect({ selectedIds, onChange }: CoAuthorSelect
         }
     }
 
-    const selectedAgents = MOCK_AGENTS.filter(a => selectedIds.includes(a.id))
-    const filteredAgents = MOCK_AGENTS.filter(a =>
+    const selectedAgents = agents.filter(a => selectedIds.includes(a.id))
+    const filteredAgents = agents.filter(a =>
         a.name.toLowerCase().includes(search.toLowerCase()) ||
         a.badge.toLowerCase().includes(search.toLowerCase())
     )
@@ -87,26 +108,34 @@ export default function CoAuthorSelect({ selectedIds, onChange }: CoAuthorSelect
                     </div>
 
                     <div className="space-y-1 max-h-[300px] overflow-y-auto">
-                        {filteredAgents.map(agent => {
-                            const isSelected = selectedIds.includes(agent.id)
-                            return (
-                                <div
-                                    key={agent.id}
-                                    onClick={() => toggleSelection(agent.id)}
-                                    className={`flex items-center justify-between p-3 rounded cursor-pointer transition-colors border ${isSelected ? 'bg-primary/20 border-primary text-primary-foreground' : 'border-transparent hover:bg-white/5'}`}
-                                >
-                                    <div>
-                                        <div className="font-bold text-sm tracking-wide">{agent.name}</div>
-                                        <div className="text-[10px] opacity-70 font-mono tracking-widest">{agent.badge}</div>
-                                    </div>
-                                    {isSelected && <Check size={16} className="text-primary" />}
-                                </div>
-                            )
-                        })}
-                        {filteredAgents.length === 0 && (
-                            <div className="text-center py-8 text-muted-foreground text-xs uppercase tracking-widest">
-                                No officers found
+                        {loading ? (
+                            <div className="text-center py-8 text-muted-foreground text-xs uppercase tracking-widest animate-pulse">
+                                Loading Personnel Database...
                             </div>
+                        ) : (
+                            <>
+                                {filteredAgents.map(agent => {
+                                    const isSelected = selectedIds.includes(agent.id)
+                                    return (
+                                        <div
+                                            key={agent.id}
+                                            onClick={() => toggleSelection(agent.id)}
+                                            className={`flex items-center justify-between p-3 rounded cursor-pointer transition-colors border ${isSelected ? 'bg-primary/20 border-primary text-primary-foreground' : 'border-transparent hover:bg-white/5'}`}
+                                        >
+                                            <div>
+                                                <div className="font-bold text-sm tracking-wide">{agent.name}</div>
+                                                <div className="text-[10px] opacity-70 font-mono tracking-widest">{agent.badge}</div>
+                                            </div>
+                                            {isSelected && <Check size={16} className="text-primary" />}
+                                        </div>
+                                    )
+                                })}
+                                {filteredAgents.length === 0 && (
+                                    <div className="text-center py-8 text-muted-foreground text-xs uppercase tracking-widest">
+                                        No officers found
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>
@@ -114,3 +143,4 @@ export default function CoAuthorSelect({ selectedIds, onChange }: CoAuthorSelect
         </div>
     )
 }
+

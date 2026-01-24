@@ -28,6 +28,14 @@ export default function CaseForm({ initialData, onSubmit, loading, isAdmin }: Ca
     const [searchTerm, setSearchTerm] = useState("")
     const [availableReports, setAvailableReports] = useState<any[]>([])
 
+    // Update defaults when session loads
+    useEffect(() => {
+        if (!initialData && session?.user) {
+            if (!leadInvestigatorId) setLeadInvestigatorId(session.user.id)
+            if (!leadInvestigatorName) setLeadInvestigatorName(session.user.name || "")
+        }
+    }, [session, initialData, leadInvestigatorId, leadInvestigatorName])
+
     useEffect(() => {
         const loadReports = async () => {
             const data = await getReports()

@@ -142,16 +142,9 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                         </div>
                         <div>
                             <InputLabel><Shield size={10} /> Stopień</InputLabel>
-                            <select
-                                value={formData.rankId}
-                                onChange={(e) => setFormData({ ...formData, rankId: e.target.value })}
-                                disabled={!canEditProtected}
-                                className="w-full bg-[#0D0F0F] border border-white/[0.08] rounded px-3 py-2 text-xs font-bold uppercase tracking-tight text-foreground focus:outline-none focus:border-primary/50 disabled:opacity-50 transition-colors"
-                            >
-                                {ranks.map(r => (
-                                    <option key={r.id} value={r.id}>{r.name}</option>
-                                ))}
-                            </select>
+                            <div className="w-full bg-[#0D0F0F] border border-white/[0.08] rounded px-3 py-2 text-xs font-bold uppercase tracking-tight text-foreground/50 cursor-not-allowed">
+                                {ranks.find(r => r.id === formData.rankId)?.name || "Nieznany"}
+                            </div>
                         </div>
                     </div>
 

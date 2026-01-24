@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import html2canvas from 'html2canvas';
-import { Report } from '@/lib/store/reports';
+import { Report, MarkerColor } from '@/lib/store/reports';
 
 export class PDFExportService {
     private doc: jsPDF;
@@ -142,6 +142,10 @@ export class PDFExportService {
 
     private async addTacticalMap(mapElement: HTMLElement) {
         this.doc.addPage('a4', 'l'); // Landscape
+
+        // Wait a bit for map to fully render tiles if needed
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
         const pageIdx = (this.doc as any).internal.getNumberOfPages();
         this.toc.push({ title: "Tactical Intelligence Map", page: pageIdx });
 
@@ -154,7 +158,10 @@ export class PDFExportService {
             const canvas = await html2canvas(mapElement, {
                 useCORS: true,
                 scale: 2,
-                backgroundColor: '#0a0a0a'
+                backgroundColor: '#0a0a0a',
+                allowTaint: true,
+                logging: false,
+                ignoreElements: (element) => element.classList.contains('leaflet-control-zoom')
             });
             const imgData = canvas.toDataURL('image/png');
             this.doc.addImage(imgData, 'PNG', 20, 30, pageWidth - 40, 130);
@@ -163,22 +170,31 @@ export class PDFExportService {
             this.doc.text("[MAP CAPTURE ERROR: SATELLITE FEED UNAVAILABLE]", 20, 50);
         }
 
-        // Legend Below Map
-        if (this.report.legend) {
-            const legendEntries = Object.entries(this.report.legend).filter(([_, val]) => val);
-            if (legendEntries.length > 0) {
+        // Legend Below Map - Derive from Map Markers
+        if (this.report.map?.markers) {
+            const usedColors = Array.from(new Set(this.report.map.markers.map((m: any) => m.color))) as MarkerColor[];
+
+            if (usedColors.length > 0) {
                 this.doc.setFontSize(12);
                 this.doc.text("TACTICAL LEGEND", 20, 170);
 
                 let lx = 20;
                 let ly = 180;
-                legendEntries.forEach(([color, label]) => {
+
+                // We use the report.legend object for descriptions, defaulting to generic if missing
+                const legendDescriptions = this.report.legend || {};
+
+                usedColors.forEach((color) => {
+                    const label = legendDescriptions[color] || `${color.charAt(0).toUpperCase() + color.slice(1)} Marker`;
+
                     // Color box
                     this.doc.setFillColor(color === 'white' ? '#ffffff' : color === 'yellow' ? '#ffff00' : color === 'red' ? '#ff0000' : color === 'blue' ? '#0000ff' : color === 'green' ? '#00ff00' : '#888888');
-                    this.doc.rect(lx, ly - 4, 4, 4, 'F');
+                    this.doc.setDrawColor(0);
+                    this.doc.rect(lx, ly - 4, 4, 4, 'FD'); // Fill and Draw border
+
                     this.doc.setFontSize(10);
                     this.doc.setFont('helvetica', 'normal');
-                    this.doc.text(label!, lx + 6, ly);
+                    this.doc.text(label, lx + 6, ly);
 
                     ly += 8;
                     if (ly > 195) { ly = 180; lx += 60; }
@@ -255,13 +271,16 @@ export class PDFExportService {
             this.doc.text(`ATTACHMENT E${i + 1}: ${photo.title.toUpperCase()}`, 20, 20);
 
             try {
-                // We attempt to add image. If it's a remote URL, this might need a proxy or base64
-                // for this implementation we assume URLs are accessible or transformed
-                this.doc.addImage(photo.fileUrl, 'JPEG', 20, 30, 250, 140, undefined, 'FAST');
+                // Determine format
+                const isPng = photo.fileUrl.startsWith('data:image/png');
+                const format = isPng ? 'PNG' : 'JPEG';
+
+                this.doc.addImage(photo.fileUrl, format, 20, 30, 250, 140, undefined, 'FAST');
             } catch (e) {
                 this.doc.setTextColor(255, 0, 0);
                 this.doc.text("[IMAGE DATA ERROR — CORRUPTED OR UNREACHABLE]", 20, 50);
                 this.doc.setTextColor(0);
+                console.error("PDF Image Error", e);
             }
 
             this.doc.setFontSize(10);
@@ -314,9 +333,17 @@ export class PDFExportService {
         await this.addPhotoAttachments();
         this.addSignOff();
 
-        // TOC needs to be added LAST but moved to page 2 (we skip it for now or insert)
-        // Actually, jsPDF allows movePage or just adding it where intended.
-        // For simplicity, we planned it as page 2, so we'll just add it to TOC list during build.
+        // Add TOC page (Page 2)
+        this.addTableOfContents();
+
+        // Move TOC to page 2 (index 2)
+        // jsPDF adds pages to the end. We want TOC at page 2.
+        // It's tricky to reorder pages in jsPDF effectively without a plugin.
+        // For now, we accept TOC at the end or we can restructure generation order.
+        // RESTRUCTURE: We can generate TOC data first, but we don't know page numbers until content is added.
+        // Alternative: Just leave it at the end for now or as an appendix.
+        // Or, we accept it might be the last page printed but visually we wanted it earlier. 
+        // Let's keep it simple: Add footer to all pages.
 
         this.addFooter();
 

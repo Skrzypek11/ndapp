@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Image as ImageIcon, Video, Plus, X, Upload, Link as LinkIcon } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import PhotoEvidenceModal from "./PhotoEvidenceModal"
 import VideoEvidenceModal from "./VideoEvidenceModal"
 import { PhotoEvidence, VideoEvidence, Marker } from "@/lib/store/reports"
-import { MOCK_AGENTS } from "./CoAuthorSelect"
+import { getUsers } from "@/app/actions/user"
 
 interface EvidenceManagerProps {
     photos: PhotoEvidence[]
@@ -17,11 +17,35 @@ interface EvidenceManagerProps {
     onVideosChange: (items: VideoEvidence[]) => void
 }
 
+interface Agent {
+    id: string
+    name: string
+    badge: string
+}
+
 export default function EvidenceManager({ photos, videos, markers, onPhotosChange, onVideosChange }: EvidenceManagerProps) {
     const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false)
     const [editingPhoto, setEditingPhoto] = useState<PhotoEvidence | null>(null)
     const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
     const [editingVideo, setEditingVideo] = useState<VideoEvidence | null>(null)
+    const [agents, setAgents] = useState<Agent[]>([])
+
+    useEffect(() => {
+        const fetchAgents = async () => {
+            try {
+                const users = await getUsers()
+                const formattedAgents = users.map((u: any) => ({
+                    id: u.id,
+                    name: u.rpName || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
+                    badge: u.badgeNumber || "N/A"
+                }))
+                setAgents(formattedAgents)
+            } catch (error) {
+                console.error("Failed to fetch agents", error)
+            }
+        }
+        fetchAgents()
+    }, [])
 
     const handlePhotoSave = (evidence: PhotoEvidence) => {
         if (editingPhoto) {
@@ -103,7 +127,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                 <div className="grid grid-cols-1 gap-3">
                     {photos.map((photo, index) => {
                         const capturedBy = photo.capturedBy.type === 'INTERNAL'
-                            ? (MOCK_AGENTS.find(a => a.id === photo.capturedBy.officerId)?.name || 'Unknown Officer')
+                            ? (agents.find(a => a.id === photo.capturedBy.officerId)?.name || 'Unknown Officer')
                             : photo.capturedBy.externalDetails?.fullName
 
                         return (
@@ -178,7 +202,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                 <div className="grid grid-cols-1 gap-3">
                     {videos.map((video, index) => {
                         const capturedBy = video.capturedBy.type === 'INTERNAL'
-                            ? (MOCK_AGENTS.find(a => a.id === video.capturedBy.officerId)?.name || 'Unknown Officer')
+                            ? (agents.find(a => a.id === video.capturedBy.officerId)?.name || 'Unknown Officer')
                             : video.capturedBy.externalDetails?.fullName
 
                         return (

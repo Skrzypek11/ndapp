@@ -5,7 +5,7 @@ import { Modal } from "@/components/ui/Modal"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { VideoEvidence, VideoSourceType, Marker } from "@/lib/store/reports"
-import { MOCK_AGENTS } from "./CoAuthorSelect"
+import { getUsers } from "@/app/actions/user"
 import { Video, User, Clock, Link as LinkIcon, Globe, Info, PlayCircle } from "lucide-react"
 
 interface VideoEvidenceModalProps {
@@ -14,6 +14,12 @@ interface VideoEvidenceModalProps {
     onSave: (evidence: VideoEvidence) => void
     initialData?: VideoEvidence | null
     availableMarkers: Marker[]
+}
+
+interface Agent {
+    id: string
+    name: string
+    badge: string
 }
 
 const SOURCE_TYPES: { label: string; value: VideoSourceType }[] = [
@@ -46,6 +52,24 @@ export default function VideoEvidenceModal({
     const [externalContact, setExternalContact] = useState("")
     const [linkedMarkerIds, setLinkedMarkerIds] = useState<string[]>([])
     const [url, setUrl] = useState("")
+    const [agents, setAgents] = useState<Agent[]>([])
+
+    useEffect(() => {
+        const fetchAgents = async () => {
+            try {
+                const users = await getUsers()
+                const formattedAgents = users.map((u: any) => ({
+                    id: u.id,
+                    name: u.rpName || `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
+                    badge: u.badgeNumber || "N/A"
+                }))
+                setAgents(formattedAgents)
+            } catch (error) {
+                console.error("Failed to fetch agents", error)
+            }
+        }
+        fetchAgents()
+    }, [])
 
     useEffect(() => {
         if (initialData) {
@@ -245,7 +269,7 @@ export default function VideoEvidenceModal({
                                     className="w-full bg-slate-900 border border-border rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary/50 font-mono"
                                 >
                                     <option value="">Select Personnel...</option>
-                                    {MOCK_AGENTS.map(agent => (
+                                    {agents.map(agent => (
                                         <option key={agent.id} value={agent.id}>{agent.badge} - {agent.name}</option>
                                     ))}
                                 </select>

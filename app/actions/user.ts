@@ -10,6 +10,7 @@ export async function createUser(formData: FormData) {
     if (!user) return { success: false, error: "Unauthorized" }
 
     const isAdmin = user.rank?.systemRole === 'ADMIN' || user.rank?.systemRole === 'ROOT'
+    const isRoot = user.rank?.systemRole === 'ROOT'
     if (!isAdmin) return { success: false, error: "Administrative privileges required" }
 
     const email = formData.get("email") as string
@@ -21,6 +22,14 @@ export async function createUser(formData: FormData) {
 
     if (!email || !password || !rpName || !rankId) {
         return { success: false, error: "Missing required fields" }
+    }
+
+    // Security Check: Prevent ADMIN from assigning ROOT role
+    if (!isRoot) {
+        const targetRank = await prisma.rank.findUnique({ where: { id: rankId } })
+        if (targetRank?.systemRole === 'ROOT') {
+            return { success: false, error: "Insufficient privileges to assign ROOT role" }
+        }
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -104,6 +113,7 @@ export async function updateOfficerProfile(userId: string, data: any) {
     if (!sessionUser) return { success: false, error: "Unauthorized" }
 
     const isAdmin = sessionUser.rank?.systemRole === 'ADMIN' || sessionUser.rank?.systemRole === 'ROOT'
+    const isRoot = sessionUser.rank?.systemRole === 'ROOT'
     const isSelf = sessionUser.id === userId
 
     if (!isAdmin && !isSelf) {
@@ -111,6 +121,18 @@ export async function updateOfficerProfile(userId: string, data: any) {
     }
 
     try {
+        // Validation: If changing rank, verify permissions
+        if (data.rankId && isAdmin) {
+            // Prevent ADMIN from assigning ROOT role if they are not ROOT themselves
+            if (!isRoot) {
+                const targetRank = await prisma.rank.findUnique({ where: { id: data.rankId } })
+                if (targetRank?.systemRole === 'ROOT') {
+                    // Check if they are trying to PROMOTE someone to ROOT
+                    return { success: false, error: "Insufficient privileges to assign ROOT role" }
+                }
+            }
+        }
+
         // If not admin, restrict which fields can be updated
         const updateData: any = isAdmin ? {
             firstName: data.firstName,
@@ -125,9 +147,13 @@ export async function updateOfficerProfile(userId: string, data: any) {
             notes: data.notes,
             avatarUrl: data.avatarUrl,
         } : {
-            // Limited fields for self-update (e.g., avatar, phone, unit assignment can be restricted too based on policy)
+            // Limited fields for self-update
             phoneNumber: data.phoneNumber,
             avatarUrl: data.avatarUrl,
+            email: data.email, // Allowed
+            notes: data.notes, // Allowed
+            // Status: allow update but PREVENT setting 'Suspended' if not admin
+            status: data.status === 'Suspended' ? undefined : data.status,
         }
 
         await prisma.user.update({
