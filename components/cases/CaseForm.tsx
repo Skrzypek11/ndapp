@@ -7,6 +7,7 @@ import { getReports } from "@/app/actions/reports"
 import { LinkedReport } from "@/lib/store/cases"
 import { useTranslation } from "@/lib/i18n"
 import CoAuthorSelect from "@/components/reports/CoAuthorSelect"
+import RichTextEditor from "@/components/shared/RichTextEditor"
 
 interface CaseFormProps {
     initialData?: any
@@ -109,12 +110,15 @@ export default function CaseForm({ initialData, onSubmit, loading, isAdmin }: Ca
                         <label className="text-[10px] font-black uppercase tracking-widest text-primary/70 px-1 flex items-center gap-2">
                             <Info size={12} /> {dict.cases.form.fields.context}
                         </label>
-                        <textarea
-                            className="w-full bg-muted/30 border border-border rounded-lg p-5 text-small text-foreground placeholder:text-muted-foreground/20 min-h-[160px] focus:outline-none focus:border-primary/50 focus:bg-muted/50 transition-all leading-relaxed font-medium shadow-inner"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            placeholder={dict.cases.form.placeholders.context}
-                        />
+                        <div className="border border-border rounded-lg overflow-hidden">
+                            <RichTextEditor
+                                content={description}
+                                onChange={setDescription}
+                                placeholder={dict.cases.form.placeholders.context}
+                                minHeight="200px"
+                                templateCategory="CASE"
+                            />
+                        </div>
                     </div>
                 </div>
             </section>

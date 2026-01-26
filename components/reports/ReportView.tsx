@@ -9,7 +9,7 @@ import {
     Image as ImageIcon, Video, PlayCircle, CheckCircle, XCircle, FileDown
 } from "lucide-react"
 import { ReportStore, Report, MarkerColor } from "@/lib/store/reports"
-import RichTextEditor from "@/components/reports/RichTextEditor"
+import RichTextEditor from "@/components/shared/RichTextEditor"
 import TacticalLegend from "@/components/reports/TacticalLegend"
 import { useTranslation } from "@/lib/i18n"
 

@@ -33,6 +33,7 @@ export const en = {
         settings: "Settings",
         admin: "Administration",
         users: "User Management",
+        templates: "Templates",
         announcements: "Announcements",
         kompendium: "Kompendium",
         logout: "Sign Out",
@@ -450,6 +451,25 @@ export const en = {
                 role: "System Role",
                 contact: "Contact"
             }
+        },
+        templates: {
+            title: "Template Manager",
+            subtitle: "System Configuration :: Templates",
+            create: "Create Template",
+            edit: "Edit Template",
+            name: "Template Name",
+            name_placeholder: "e.g. Arrest Report",
+            context: "Target Context",
+            description: "Description",
+            desc_placeholder: "Brief description...",
+            content: "Template Content",
+            insert: "Insert Template",
+            save: "Save Template",
+            cancel: "Cancel",
+            delete_confirm: "Are you sure you want to delete this template?",
+            no_templates: "No templates defined",
+            last_updated: "Last Updated",
+            warning: "Warning: Inserting a template will overwrite current content."
         }
     }
 }
@@ -487,6 +507,7 @@ export const pl = {
         settings: "Ustawienia",
         admin: "Administracja",
         users: "Zarządzanie Użytkownikami",
+        templates: "Szablony",
         announcements: "Ogłoszenia",
         kompendium: "Kompendium",
         logout: "Wyloguj",
@@ -904,6 +925,25 @@ export const pl = {
                 role: "Rola Systemowa",
                 contact: "Kontakt"
             }
+        },
+        templates: {
+            title: "Zarządzanie Szablonami",
+            subtitle: "Konfiguracja Systemu :: Szablony",
+            create: "Utwórz Szablon",
+            edit: "Edytuj Szablon",
+            name: "Nazwa Szablonu",
+            name_placeholder: "np. Raport z Aresztowania",
+            context: "Kontekst Docelowy",
+            description: "Opis",
+            desc_placeholder: "Krótki opis...",
+            content: "Treść Szablonu",
+            insert: "Wstaw Szablon",
+            save: "Zapisz Szablon",
+            cancel: "Anuluj",
+            delete_confirm: "Czy na pewno chcesz usunąć ten szablon?",
+            no_templates: "Brak zdefiniowanych szablonów",
+            last_updated: "Ostatnia Aktualizacja",
+            warning: "Uwaga: Wstawienie szablonu nadpisze obecną treść."
         }
     }
 }

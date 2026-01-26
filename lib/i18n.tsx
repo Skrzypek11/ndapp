@@ -15,7 +15,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
     // Default to English, could check browser preference or local storage here
-    const [language, setLanguageState] = useState<Language>("en");
+    const [language, setLanguageState] = useState<Language>("pl");
 
     useEffect(() => {
         const saved = localStorage.getItem("app-language") as Language;

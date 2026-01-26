@@ -53,6 +53,7 @@ export default function Sidebar() {
 
     const adminLinks = [
         { name: dict.sidebar.users, href: "/admin/users", icon: Users },
+        { name: dict.sidebar.templates, href: "/dashboard/admin/templates", icon: FileText },
     ]
 
     const settingsLink = { name: dict.sidebar.settings, href: "/dashboard/settings", icon: Settings }

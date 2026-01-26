@@ -3,13 +3,15 @@
 import { useState, useEffect, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { useTranslation } from "@/lib/i18n"
-import { getCompendiumDocs, createCompendiumDoc, getCategories } from "@/app/actions/kompendium"
+import { getCompendiumDocs, createCompendiumDoc, getCategories, deleteCompendiumDoc } from "@/app/actions/kompendium"
 import {
     BookOpen, Search, Folder, FileText,
     Plus, ChevronRight, Hash, Clock,
     User, X, Save, Layers, Archive,
     Sidebar as SidebarIcon
 } from "lucide-react"
+
+import RichTextEditor from "@/components/shared/RichTextEditor"
 
 export default function KompendiumPage() {
     const { data: session } = useSession()
@@ -181,6 +183,24 @@ export default function KompendiumPage() {
                                         <ChevronRight size={14} className="rotate-180" /> Back to Library
                                     </button>
                                     <div className="flex items-center gap-6">
+                                        {isAdmin && (
+                                            <button
+                                                onClick={async () => {
+                                                    if (confirm("Are you sure you want to delete this document?")) {
+                                                        const res = await deleteCompendiumDoc(selectedDoc.id)
+                                                        if (res.success) {
+                                                            setSelectedDoc(null)
+                                                            fetchData()
+                                                        } else {
+                                                            alert(res.error)
+                                                        }
+                                                    }
+                                                }}
+                                                className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-destructive hover:text-destructive/80 transition-all border border-destructive/20 hover:bg-destructive/10 px-3 py-1.5 rounded"
+                                            >
+                                                <X size={12} /> Delete Protocol
+                                            </button>
+                                        )}
                                         <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-primary/60">
                                             <Folder size={12} /> {selectedDoc.category.replace(/\//g, ' > ')}
                                         </div>
@@ -309,14 +329,15 @@ function CreateDocModal({ onClose, onSuccess, dict, session }: any) {
 
                     <div className="space-y-3">
                         <label className="text-[10px] font-black uppercase tracking-widest text-primary/60">Intelligence Dossier Content</label>
-                        <textarea
-                            required
-                            rows={15}
-                            value={formData.body}
-                            onChange={e => setFormData({ ...formData, body: e.target.value })}
-                            placeholder="Type documentation content here..."
-                            className="w-full bg-white/[0.03] border border-white/10 rounded px-8 py-6 text-[14px] font-medium leading-relaxed resize-none focus:outline-none focus:border-primary/40 focus:bg-white/[0.05] transition-all italic selection:bg-primary selection:text-white"
-                        />
+                        <div className="border border-white/10 rounded overflow-hidden bg-black/20">
+                            <RichTextEditor
+                                content={formData.body}
+                                onChange={html => setFormData({ ...formData, body: html })}
+                                placeholder="Type documentation content here..."
+                                minHeight="400px"
+                                templateCategory="KOMPENDIUM"
+                            />
+                        </div>
                     </div>
 
                     <div className="space-y-3">

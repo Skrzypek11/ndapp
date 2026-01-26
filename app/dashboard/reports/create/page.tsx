@@ -8,7 +8,7 @@ import { Save, Send, ArrowLeft, FileText, Map as MapIcon, Paperclip, Users, User
 import { useTranslation } from "@/lib/i18n"
 import { createReport, updateReport, submitReport, getReportById } from "@/app/actions/reports"
 import { Marker, MarkerColor, PhotoEvidence, VideoEvidence, Shape } from "@/lib/store/reports"
-import RichTextEditor from "@/components/reports/RichTextEditor"
+import RichTextEditor from "@/components/shared/RichTextEditor"
 import CoAuthorSelect from "@/components/reports/CoAuthorSelect"
 import EvidenceManager from "@/components/reports/EvidenceManager"
 import TacticalLegend from "@/components/reports/TacticalLegend"
@@ -300,7 +300,7 @@ function CreateReportContent() {
                             <h3 className="text-small font-black uppercase tracking-[0.2em] text-foreground">{dict.reports.form.narrative}</h3>
                         </div>
                         <div className="flex-1 p-0 relative">
-                            <RichTextEditor content={content} onChange={setContent} />
+                            <RichTextEditor content={content} onChange={setContent} templateCategory="REPORT" />
                         </div>
                     </section>
                 </div>

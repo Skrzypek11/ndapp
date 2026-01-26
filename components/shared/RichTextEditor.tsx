@@ -5,66 +5,65 @@ import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Bold, Italic, Underline as UnderIcon, List, ListOrdered, Heading1, Heading2, Quote, Undo, Redo, FileText, ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Modal } from '@/components/ui/Modal'
-import { Button } from '@/components/ui/Button'
+import { getTemplates } from '@/app/actions/templates'
+import { useTranslation } from "@/lib/i18n"
 
 interface RichTextEditorProps {
     content: string
     onChange: (html: string) => void
     editable?: boolean
+    placeholder?: string
+    minHeight?: string
+    templateCategory?: 'REPORT' | 'CASE' | 'KOMPENDIUM'
 }
 
-const TEMPLATES = [
-    {
-        id: 'surveillance',
-        label: 'Surveillance Log',
-        description: 'Standard observation log for suspect tracking.',
-        content: `<h2>Surveillance Log</h2><p><strong>Target:</strong> [Name]</p><p><strong>Location:</strong> [Address]</p><p><strong>Start Time:</strong> 00:00</p><p><strong>End Time:</strong> 00:00</p><h3>Observations</h3><ul><li>entry 1...</li></ul>`
-    },
-    {
-        id: 'arrest',
-        label: 'Arrest Report',
-        description: 'For documenting suspect apprehension and rights redaction.',
-        content: `<h2>Arrest Report</h2><p><strong>Suspect:</strong> [Name]</p><p><strong>Charges:</strong> [List]</p><h3>Narrative</h3><p>Suspect was apprehended at...</p><h3>Miranda Rights</h3><p>Read at: [Time]</p>`
-    },
-    {
-        id: 'seizure',
-        label: 'Seizure Protocol',
-        description: 'Chain of custody and itemized list of seized goods.',
-        content: `<h2>Seizure Protocol</h2><p><strong>Location:</strong> [Address]</p><h3>Items Seized</h3><ul><li>Item 1 (Qty)</li><li>Item 2 (Qty)</li></ul><h3>Chain of Custody</h3><p>Evidence bagged and tagged by...</p>`
-    },
-    {
-        id: 'incident',
-        label: 'Incident Report',
-        description: 'General purpose incident documentation.',
-        content: `<h2>Incident Report</h2><p><strong>Type:</strong> [Type]</p><p><strong>Involved Parties:</strong> [Names]</p><h3>Description</h3><p>Detailed description of events...</p>`
-    }
-]
-
-export default function RichTextEditor({ content, onChange, editable = true }: RichTextEditorProps) {
+export default function RichTextEditor({ content, onChange, editable = true, placeholder = 'Enter content...', minHeight = '300px', templateCategory }: RichTextEditorProps) {
+    const { dict } = useTranslation()
     const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false)
+    const [templates, setTemplates] = useState<any[]>([])
+
+    useEffect(() => {
+        if (templateCategory && isTemplateModalOpen) {
+            getTemplates(templateCategory).then(setTemplates)
+        }
+    }, [templateCategory, isTemplateModalOpen])
 
     const editor = useEditor({
         extensions: [
             StarterKit,
             Underline,
             Placeholder.configure({
-                placeholder: 'Enter report details here...',
+                placeholder: placeholder,
             }),
         ],
-        content,
+        content: content,
         editable,
         onUpdate: ({ editor }) => {
             onChange(editor.getHTML())
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[300px] p-4 bg-transparent text-foreground/90 font-mono leading-relaxed'
+                class: `prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[${minHeight}] p-4 bg-transparent text-foreground/90 font-mono leading-relaxed`
             }
         },
         immediatelyRender: false,
     })
+
+    // Update content if it changes externally (e.g. loading initial data)
+    useEffect(() => {
+        if (editor && content !== editor.getHTML()) {
+            // Only update if content is different to avoid cursor jumps or loops
+            // A simple check might not be enough if HTML formatting changes slightly, but for initial load it's fine.
+            // Better: only set content if editor is empty or specifically reset.
+            // For now, let's rely on the initial content passed to useEditor, but that only works once.
+            // If we are editing, content prop might update after fetch.
+            if (editor.isEmpty && content) {
+                editor.commands.setContent(content)
+            }
+        }
+    }, [content, editor])
 
     const insertTemplate = (templateContent: string) => {
         if (editor) {
@@ -116,15 +115,16 @@ export default function RichTextEditor({ content, onChange, editable = true }: R
 
                 <div className="flex-1" />
 
-                {/* Template Trigger */}
-                <button
-                    onClick={() => setIsTemplateModalOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-primary/10 text-primary text-xs font-bold uppercase tracking-wide hover:bg-primary/20 transition-colors"
-                >
-                    <FileText size={14} />
-                    Insert Template
-                    <ChevronDown size={12} className="opacity-50" />
-                </button>
+                {templateCategory && (
+                    <button
+                        onClick={() => setIsTemplateModalOpen(true)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-primary/10 text-primary text-xs font-bold uppercase tracking-wide hover:bg-primary/20 transition-colors"
+                    >
+                        <FileText size={14} />
+                        {dict.admin.templates.insert}
+                        <ChevronDown size={12} className="opacity-50" />
+                    </button>
+                )}
             </div>
 
             {/* Editor Area */}
@@ -136,25 +136,25 @@ export default function RichTextEditor({ content, onChange, editable = true }: R
             <Modal
                 isOpen={isTemplateModalOpen}
                 onClose={() => setIsTemplateModalOpen(false)}
-                title="Select Report Template"
+                title={dict.admin.templates.insert}
             >
-                <div className="grid gap-3">
-                    {TEMPLATES.map(t => (
+                <div className="grid gap-3 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                    {templates.length > 0 ? templates.map(t => (
                         <button
                             key={t.id}
                             onClick={() => insertTemplate(t.content)}
                             className="text-left p-4 rounded border border-border bg-white/5 hover:bg-white/10 hover:border-primary/50 transition-all group"
                         >
                             <div className="flex items-center justify-between mb-1">
-                                <span className="font-bold text-sm text-primary group-hover:text-primary-foreground">{t.label}</span>
+                                <span className="font-bold text-sm text-primary group-hover:text-primary-foreground">{t.name}</span>
                                 <FileText size={14} className="opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
                             </div>
                             <p className="text-xs text-muted-foreground">{t.description}</p>
                         </button>
-                    ))}
+                    )) : <p className="text-center text-muted-foreground p-4 italic">{dict.admin.templates.no_templates}</p>}
                 </div>
                 <p className="text-[10px] text-red-500 mt-4 text-center uppercase tracking-widest opacity-70">
-                    Warning: Inserting a template will overwrite current content.
+                    {dict.admin.templates.warning}
                 </p>
             </Modal>
         </div>
