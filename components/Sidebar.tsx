@@ -84,8 +84,8 @@ export default function Sidebar() {
                 ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
                 lg:translate-x-0
             `}>
-                {/* Header / Brand */}
-                <div className="p-5 border-b border-border flex flex-col items-center gap-4 bg-muted/20 backdrop-blur-sm relative">
+                {/* Header / Brand - Optimized as requested */}
+                <div className="pl-2 pr-2 py-1 border-b border-border flex items-center gap-2 bg-muted/20 backdrop-blur-sm relative shrink-0">
                     {/* Mobile Close Button */}
                     <button
                         onClick={() => setIsMobileOpen(false)}
@@ -94,25 +94,27 @@ export default function Sidebar() {
                         <X size={20} />
                     </button>
 
-                    <div className="w-28 h-28 bg-primary/5 rounded-2xl border border-primary/10 flex items-center justify-center shadow-[inset_0_0_20px_rgba(var(--primary),0.05)] group relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="relative flex items-center justify-center shrink-0">
+                        <div className="absolute inset-0 bg-primary/20 blur-xl opacity-20 rounded-full"></div>
                         <img
                             src="/images/logo.png"
                             alt="Logo"
-                            className="w-20 h-20 object-contain group-hover:scale-110 transition-transform duration-700 ease-out drop-shadow-[0_0_12px_rgba(var(--primary),0.4)]"
+                            className="w-16 h-16 object-contain drop-shadow-[0_0_12px_rgba(var(--primary),0.3)] relative z-10"
                         />
                     </div>
-                    <div className="flex flex-col items-center text-center">
-                        <span className="text-[16px] font-black uppercase tracking-[0.2em] text-foreground leading-none drop-shadow-sm">Narcotic Div.</span>
-                        <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-primary mt-1.5 opacity-80">Intell Terminal</span>
-                        <div className="w-10 h-0.5 bg-primary/30 mt-3 rounded-full"></div>
+                    <div className="flex flex-col min-w-0 justify-center">
+                        <span className="text-[13px] font-black uppercase tracking-[0.1em] text-foreground leading-none">Narcotic</span>
+                        <span className="text-[13px] font-black uppercase tracking-[0.1em] text-foreground leading-none mt-0.5">Division</span>
+                        <div className="flex items-center gap-2 mt-1">
+                            <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-primary opacity-80 whitespace-nowrap leading-none">Intell Terminal</span>
+                        </div>
                     </div>
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 overflow-y-auto p-3 space-y-0.5 custom-scrollbar flex flex-col">
-                    <div className="flex-1">
-                        <div className="px-3 mb-2 mt-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">{dict.sidebar.operations}</div>
+                <nav className="flex-1 overflow-y-auto p-2 space-y-0.5 custom-scrollbar flex flex-col min-h-0">
+                    <div className="shrink-0">
+                        <div className="px-3 mb-1 mt-2 text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">{dict.sidebar.operations}</div>
                         {links.map((link) => {
                             const Icon = link.icon
                             const active = isActive(link.href)
@@ -120,7 +122,7 @@ export default function Sidebar() {
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className={`flex items-center gap-3 px-3 py-2.5 rounded transition-all group border ${active
+                                    className={`flex items-center gap-3 px-3 py-1 rounded transition-all group border ${active
                                         ? "bg-primary/10 border-primary/20 text-primary shadow-sm"
                                         : "border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                                         }`}
@@ -137,39 +139,39 @@ export default function Sidebar() {
                                 </Link>
                             )
                         })}
-
-                        {/* Admin Section */}
-                        {(user?.rank?.systemRole === "ADMIN" || user?.rank?.systemRole === "ROOT") && (
-                            <>
-                                <div className="px-3 mb-2 mt-5 text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">{dict.sidebar.admin}</div>
-                                {adminLinks.map((link) => {
-                                    const Icon = link.icon
-                                    const active = isActive(link.href)
-                                    return (
-                                        <Link
-                                            key={link.href}
-                                            href={link.href}
-                                            className={`flex items-center gap-3 px-3 py-2.5 rounded transition-all group border ${active
-                                                ? "bg-primary/10 border-primary/20 text-primary shadow-sm"
-                                                : "border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                                                }`}
-                                        >
-                                            <Icon size={18} className={`${active ? "text-primary" : "text-muted-foreground group-hover:text-primary"} transition-colors`} />
-                                            <span className={`text-[11px] font-black uppercase tracking-widest ${active ? "opacity-100" : "opacity-80 group-hover:opacity-100"}`}>
-                                                {link.name}
-                                            </span>
-                                        </Link>
-                                    )
-                                })}
-                            </>
-                        )}
                     </div>
 
-                    <div className="mt-auto pt-4">
-                        <div className="px-3 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary/60">{dict.sidebar.system}</div>
+                    {/* Admin Section */}
+                    {(user?.rank?.systemRole === "ADMIN" || user?.rank?.systemRole === "ROOT") && (
+                        <div className="shrink-0 mt-3">
+                            <div className="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">{dict.sidebar.admin}</div>
+                            {adminLinks.map((link) => {
+                                const Icon = link.icon
+                                const active = isActive(link.href)
+                                return (
+                                    <Link
+                                        key={link.href}
+                                        href={link.href}
+                                        className={`flex items-center gap-3 px-3 py-1 rounded transition-all group border ${active
+                                            ? "bg-primary/10 border-primary/20 text-primary shadow-sm"
+                                            : "border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                                            }`}
+                                    >
+                                        <Icon size={18} className={`${active ? "text-primary" : "text-muted-foreground group-hover:text-primary"} transition-colors`} />
+                                        <span className={`text-[11px] font-black uppercase tracking-widest ${active ? "opacity-100" : "opacity-80 group-hover:opacity-100"}`}>
+                                            {link.name}
+                                        </span>
+                                    </Link>
+                                )
+                            })}
+                        </div>
+                    )}
+
+                    <div className="mt-auto shrink-0 pt-3">
+                        <div className="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.2em] text-primary/60">{dict.sidebar.system}</div>
                         <Link
                             href={settingsLink.href}
-                            className={`flex items-center gap-3 px-3 py-2.5 rounded transition-all group border ${isActive(settingsLink.href)
+                            className={`flex items-center gap-3 px-3 py-1 rounded transition-all group border ${isActive(settingsLink.href)
                                 ? "bg-primary/10 border-primary/20 text-primary shadow-sm"
                                 : "border-transparent text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                                 }`}
@@ -183,36 +185,36 @@ export default function Sidebar() {
                 </nav>
 
                 {/* User Profile / Status */}
-                <div className="p-3 border-t border-border bg-muted/10">
+                <div className="p-2 border-t border-border bg-muted/10 shrink-0">
                     <div
                         onClick={() => user?.id && openProfile(user.id)}
-                        className="flex items-center gap-2.5 p-2.5 bg-background border border-border rounded-md shadow-md group hover:border-primary/40 transition-all cursor-pointer"
+                        className="flex items-center gap-3 p-2 bg-background border border-border rounded-md shadow-md group hover:border-primary/40 transition-all cursor-pointer"
                     >
                         <div className="relative shrink-0">
-                            <div className="w-9 h-9 rounded-md overflow-hidden bg-muted border border-border">
+                            <div className="w-8 h-8 rounded-md overflow-hidden bg-muted border border-border">
                                 <img
                                     src={user?.image || `https://ui-avatars.com/api/?name=${user?.name || "Agent"}&background=0D8ABC&color=fff`}
                                     alt="User"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-primary border-2 border-background rounded-full animate-pulse shadow-[0_0_8px_rgba(var(--primary),0.5)]"></div>
+                            <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-primary border-2 border-background rounded-full animate-pulse shadow-[0_0_8px_rgba(var(--primary),0.5)]"></div>
                         </div>
                         <div className="flex-1 min-w-0 overflow-hidden">
-                            <div className="text-[11px] font-black uppercase tracking-tight text-foreground truncate">{user?.name || "Agent UNKNOWN"}</div>
-                            <div className="text-[9px] font-bold uppercase tracking-widest text-primary/80 truncate">{user?.rank?.name || dict.sidebar.user_loading}</div>
+                            <div className="text-[10px] font-black uppercase tracking-tight text-foreground truncate">{user?.name || "Agent UNKNOWN"}</div>
+                            <div className="text-[8px] font-bold uppercase tracking-widest text-primary/80 truncate">{user?.rank?.name || dict.sidebar.user_loading}</div>
                         </div>
                         <button
                             onClick={() => signOut({ callbackUrl: "/login" })}
-                            className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-all border border-transparent hover:border-destructive/30"
+                            className="p-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition-all border border-transparent hover:border-destructive/30"
                             title={dict.sidebar.logout}
                         >
-                            <LogOut size={15} />
+                            <LogOut size={14} />
                         </button>
                     </div>
-                    <div className="mt-2.5 px-2 flex items-center justify-between text-[9px] font-black uppercase tracking-[0.1em] text-muted-foreground/60">
+                    <div className="mt-2 px-1 flex items-center justify-between text-[8px] font-black uppercase tracking-[0.1em] text-muted-foreground/60">
                         <span>Terminal node active</span>
-                        <span className="flex items-center gap-1"><Activity size={9} /> 4.2ms</span>
+                        <span className="flex items-center gap-1"><Activity size={8} /> 4.2ms</span>
                     </div>
                 </div>
             </aside>
