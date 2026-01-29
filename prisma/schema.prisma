@@ -40,6 +40,7 @@ model User {
   authoredAnnouncements Announcement[]    @relation("AnnouncementAuthor")
   readAnnouncements     AnnouncementRead[]
   authoredCompendiumDocs CompendiumDoc[]   @relation("CompendiumAuthor")
+  confiscations         Confiscation[]    @relation("OfficerConfiscations")
 }
 
 model Rank {
@@ -81,6 +82,8 @@ model Report {
 
   // Link to Cases
   cases           CaseModel[] @relation("CaseReports")
+  
+  confiscations   Confiscation[]
 }
 
 model CaseModel {
@@ -153,4 +156,27 @@ model Template {
   type        String   // REPORT, CASE, KOMPENDIUM
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Confiscation {
+  id          String   @id @default(uuid())
+  citizenName String?  
+  drugType    String   
+  quantity    Float    // Stored in grams
+  
+  officerId   String
+  officer     User     @relation("OfficerConfiscations", fields: [officerId], references: [id])
+  
+  reportId    String?
+  report      Report?  @relation(fields: [reportId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DrugType {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

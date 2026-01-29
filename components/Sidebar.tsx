@@ -16,7 +16,8 @@ import {
     Bell,
     BookOpen,
     Menu,
-    X
+    X,
+    Scale
 } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 import { useProfileStore } from "@/lib/store/profile"
@@ -49,11 +50,11 @@ export default function Sidebar() {
         { name: dict.sidebar.cases, href: "/dashboard/cases", icon: Briefcase },
         { name: dict.sidebar.announcements, href: "/dashboard/announcements", icon: Bell, badge: unreadCount },
         { name: dict.sidebar.kompendium, href: "/dashboard/kompendium", icon: BookOpen },
+        { name: dict.sidebar.confiscations, href: "/dashboard/confiscations", icon: Scale },
     ]
 
     const adminLinks = [
-        { name: dict.sidebar.users, href: "/admin/users", icon: Users },
-        { name: dict.sidebar.templates, href: "/dashboard/admin/templates", icon: FileText },
+        { name: dict.admin_panel.title, href: "/dashboard/admin/panel", icon: Shield },
     ]
 
     const settingsLink = { name: dict.sidebar.settings, href: "/dashboard/settings", icon: Settings }

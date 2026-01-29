@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { Plus, Trash, Edit, FileText, ChevronRight, Save, X } from "lucide-react"
+import { Plus, Trash, Edit, FileText, ChevronRight, Save, X, ChevronLeft } from "lucide-react"
 import { useTranslation } from "@/lib/i18n"
 import { createPortal } from "react-dom"
 import { getTemplates, createTemplate, updateTemplate, deleteTemplate } from "@/app/actions/templates"
@@ -74,15 +74,22 @@ export default function TemplatesPage() {
 
     return (
         <div className="animate-fade-in space-y-8 pb-12">
-            <header className="flex items-center justify-between bg-card border border-border p-6 rounded-md shadow-xl backdrop-blur-md bg-opacity-95">
-                <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 bg-primary/20 rounded flex items-center justify-center text-primary border border-primary/30 shadow-inner">
-                        <FileText size={28} />
-                    </div>
+            {/* Header */}
+            <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-card border border-border p-6 rounded-md shadow-sm">
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => router.push('/dashboard/admin/panel')}
+                        className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground hover:text-foreground"
+                    >
+                        <ChevronLeft size={24} />
+                    </button>
                     <div>
-                        <h1 className="text-h1 text-foreground leading-none mb-1 uppercase font-black italic">{dict.admin.templates.title}</h1>
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-mono leading-none">
-                            {dict.admin.templates.subtitle}
+                        <h1 className="text-2xl font-black uppercase tracking-tight text-foreground flex items-center gap-3">
+                            <FileText className="text-primary" size={28} />
+                            {dict.admin_panel.hub.templates}
+                        </h1>
+                        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">
+                            {dict.admin_panel.hub.templates_desc}
                         </p>
                     </div>
                 </div>

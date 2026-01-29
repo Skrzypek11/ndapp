@@ -52,7 +52,8 @@ export async function getReportById(id: string) {
                 author: true,
                 coAuthors: true,
                 reviewer: true,
-                cases: true
+                cases: true,
+                confiscations: { include: { officer: true } }
             }
         })
 
@@ -79,6 +80,7 @@ export async function createReport(data: {
     mapData?: any;
     legend?: any;
     evidence?: any;
+    confiscationIds?: string[];
 }) {
     const user = await getServerUser()
     if (!user) return { success: false, error: "Unauthorized" }
@@ -95,6 +97,14 @@ export async function createReport(data: {
                 status: 'DRAFT',
             }
         })
+
+        if (data.confiscationIds && data.confiscationIds.length > 0) {
+            await prisma.confiscation.updateMany({
+                where: { id: { in: data.confiscationIds } },
+                data: { reportId: report.id }
+            })
+        }
+
         revalidatePath("/dashboard/reports")
         return { success: true, report }
     } catch (error) {
@@ -123,10 +133,30 @@ export async function updateReport(id: string, updates: any) {
             return { success: false, error: "Unauthorized modification attempt" }
         }
 
+        const { confiscationIds, ...reportData } = updates
+
         await prisma.report.update({
             where: { id },
-            data: updates
+            data: reportData
         })
+
+        if (confiscationIds && Array.isArray(confiscationIds)) {
+            // First unlink all (optional, but ensures sync) or just add new ones? 
+            // Better to just link provided ones for now to avoid accidental unlinks unless we send full state
+            // Let's assume we send new additions, or we handle unlinking separately. 
+            // But for full sync behavior:
+            // 1. Unlink all from this report (reset to null)
+            // 2. Link new list
+            // However, that might be too aggressive if we don't load all first.
+            // Let's stick to "Link provided IDs"
+            if (confiscationIds.length > 0) {
+                await prisma.confiscation.updateMany({
+                    where: { id: { in: confiscationIds } },
+                    data: { reportId: id }
+                })
+            }
+        }
+
         revalidatePath(`/dashboard/reports/${id}`)
         revalidatePath("/dashboard/reports")
         return { success: true }

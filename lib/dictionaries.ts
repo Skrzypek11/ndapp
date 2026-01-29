@@ -36,6 +36,7 @@ export const en = {
         templates: "Templates",
         announcements: "Announcements",
         kompendium: "Kompendium",
+        confiscations: "Confiscations",
         logout: "Sign Out",
         user_loading: "Authenticating...",
         operations: "Operations",
@@ -215,6 +216,61 @@ export const en = {
             confirm_error: "Rejection reason is required"
         },
     },
+    confiscations: {
+        title: "Drug Confiscations",
+        subtitle: "Seized Contraband Registry",
+        create: "Log Confiscation",
+        create_header: "New Confiscation Log",
+        list: {
+            citizen: "Citizen / Subject",
+            drug: "Substance",
+            quantity: "Quantity",
+            date: "Date",
+            officer: "Officer",
+            actions: "Actions",
+            no_records: "No confiscations recorded",
+        },
+        form: {
+            citizen_label: "Citizen Name",
+            citizen_placeholder: "e.g. John Doe (or Unknown)",
+            drug_label: "Substance Type",
+            qty_label: "Quantity",
+            unit_label: "Unit",
+            notes_label: "Additional Notes",
+            submit: "Log Seizure",
+            cancel: "Cancel",
+            success: "Confiscation logged successfully"
+        },
+        types: {
+            marihuana: "Marihuana",
+            kokaina: "Cocaine",
+            metamfetamina: "Methamphetamine",
+            heroina: "Heroin",
+            lsd: "LSD",
+            inne: "Other"
+        }
+    },
+    admin_panel: {
+        title: "Admin Panel",
+        subtitle: "System Administration & Resources",
+        hub: {
+            users: "User Management",
+            users_desc: "Manage users, ranks, and permissions",
+            drugs: "Controlled Substances",
+            drugs_desc: "Manage list of illegal substances",
+            templates: "Document Templates",
+            templates_desc: "Manage report and case templates",
+            ranks: "Ranks & Permissions",
+            ranks_desc: "Manage hierarchy and access levels"
+        },
+        drugs: {
+            title: "Substance Registry",
+            create: "Add Substance",
+            name: "Name",
+            placeholder: "e.g. Fentanyl",
+            delete_confirm: "Delete this substance type?"
+        }
+    },
     dashboard: {
         title: "Operational Command",
         node: "Node",
@@ -223,7 +279,10 @@ export const en = {
             active_duty: "Active Duty",
             open_cases: "Open Cases",
             closed_cases: "Closed Cases",
-            pending_closure: "Pending Closure"
+            pending_closure: "Pending Closure",
+            unit_seizures: "Unit Seizures",
+            my_seizures: "My Seizures",
+            contribution: "Contribution"
         },
         assignments: {
             title: "Your Active Assignments",
@@ -510,6 +569,7 @@ export const pl = {
         templates: "Szablony",
         announcements: "Ogłoszenia",
         kompendium: "Kompendium",
+        confiscations: "Konfiskaty",
         logout: "Wyloguj",
         user_loading: "Autoryzacja...",
         operations: "Operacje",
@@ -689,6 +749,61 @@ export const pl = {
             confirm_error: "Powód odrzucenia jest wymagany"
         },
     },
+    confiscations: {
+        title: "Konfiskaty",
+        subtitle: "Rejestr Zarekwirowanych Substancji",
+        create: "Zarejestruj Konfiskatę",
+        create_header: "Nowy Wpis Konfiskaty",
+        list: {
+            citizen: "Obywatel / Podejrzany",
+            drug: "Substancja",
+            quantity: "Ilość",
+            date: "Data",
+            officer: "Funkcjonariusz",
+            actions: "Akcje",
+            no_records: "Brak zarejestrowanych konfiskat",
+        },
+        form: {
+            citizen_label: "Imię i Nazwisko",
+            citizen_placeholder: "np. Jan Kowalski (lub Nieznany)",
+            drug_label: "Rodzaj Substancji",
+            qty_label: "Ilość",
+            unit_label: "Jednostka",
+            notes_label: "Dodatkowe Notatki",
+            submit: "Zapisz Konfiskatę",
+            cancel: "Anuluj",
+            success: "Pomyślnie zarejestrowano konfiskatę"
+        },
+        types: {
+            marihuana: "Marihuana",
+            kokaina: "Kokaina",
+            metamfetamina: "Metamfetamina",
+            heroina: "Heroina",
+            lsd: "LSD",
+            inne: "Inne"
+        }
+    },
+    admin_panel: {
+        title: "Panel Administratora",
+        subtitle: "Administracja Systemem i Zasobami",
+        hub: {
+            users: "Zarządzanie Użytkownikami",
+            users_desc: "Zarządzaj użytkownikami, stopniami i uprawnieniami",
+            drugs: "Środki Odurzające",
+            drugs_desc: "Zarządzaj listą nielegalnych substancji",
+            templates: "Szablony Dokumentów",
+            templates_desc: "Zarządzaj szablonami raportów i spraw",
+            ranks: "Stopnie i Uprawnienia",
+            ranks_desc: "Zarządzaj hierarchią i poziomami dostępu"
+        },
+        drugs: {
+            title: "Rejestr Substancji",
+            create: "Dodaj Substancję",
+            name: "Nazwa",
+            placeholder: "np. Fentanyl",
+            delete_confirm: "Usunąć ten rodzaj substancji?"
+        }
+    },
     dashboard: {
         title: "Dowodzenie Operacyjne",
         node: "Węzeł",
@@ -697,7 +812,10 @@ export const pl = {
             active_duty: "W Służbie",
             open_cases: "Otwarte Sprawy",
             closed_cases: "Zamknięte Sprawy",
-            pending_closure: "Oczekuje na Zamknięcie"
+            pending_closure: "Oczekujące na Zamknięcie",
+            unit_seizures: "Konfiskaty Jednostki",
+            my_seizures: "Moje Konfiskaty",
+            contribution: "Wkład"
         },
         assignments: {
             title: "Twoje Aktywne Zadania",

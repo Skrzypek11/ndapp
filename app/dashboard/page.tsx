@@ -14,6 +14,8 @@ import { ReportStore, Report } from "@/lib/store/reports"
 import { ActivityStore, Activity as ActivityLog } from "@/lib/store/activity"
 import { getUsers } from "@/app/actions/user"
 import { getAnnouncements } from "@/app/actions/announcements"
+import { getSeizureStats } from "@/app/actions/confiscations"
+import SeizureStats from "@/components/dashboard/SeizureStats"
 
 export default function DashboardPage() {
     const { data: session } = useSession()
@@ -25,6 +27,7 @@ export default function DashboardPage() {
         closedCases: 0,
         pendingClosure: 0
     })
+    const [seizureStats, setSeizureStats] = useState({ total: 0, user: 0 })
     const [userCases, setUserCases] = useState<Case[]>([])
     const [userReports, setUserReports] = useState<Report[]>([])
     const [announcements, setAnnouncements] = useState<any[]>([])
@@ -39,6 +42,9 @@ export default function DashboardPage() {
             const allAnnouncements = await getAnnouncements()
             const allActivities = ActivityStore.getAll()
             const allUsers = await getUsers()
+            const seizures = await getSeizureStats()
+
+            setSeizureStats(seizures)
 
             // Stats logic
             const openStatuses = ['ASSIGNED', 'IN_PROGRESS', 'RETURNED']
@@ -112,10 +118,12 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex flex-col">
                         <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">ENCRYPTED_TUNNEL</span>
-                        <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">Stability: UNINTERRUPTED</span>
+                        <span className="text-9px font-bold text-muted-foreground uppercase tracking-widest mt-0.5">Stability: UNINTERRUPTED</span>
                     </div>
                 </div>
             </header>
+
+            <SeizureStats totalKg={seizureStats.total} userKg={seizureStats.user} dict={dict} />
 
             {/* Strategic Metrics Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -4,7 +4,8 @@ import { Suspense, useState, useEffect, use } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import dynamic from "next/dynamic"
-import { Save, Send, ArrowLeft, FileText, Map as MapIcon, Paperclip, Users, User, ChevronLeft } from "lucide-react"
+import { ChevronLeft, Save, Send, AlertTriangle, User, Users, FileText, Map as MapIcon, Paperclip, Scale } from "lucide-react"
+import ConfiscationLinker from "@/components/reports/ConfiscationLinker"
 import { useTranslation } from "@/lib/i18n"
 import { createReport, updateReport, submitReport, getReportById } from "@/app/actions/reports"
 import { Marker, MarkerColor, PhotoEvidence, VideoEvidence, Shape } from "@/lib/store/reports"
@@ -12,14 +13,13 @@ import RichTextEditor from "@/components/shared/RichTextEditor"
 import CoAuthorSelect from "@/components/reports/CoAuthorSelect"
 import EvidenceManager from "@/components/reports/EvidenceManager"
 import TacticalLegend from "@/components/reports/TacticalLegend"
+import MarkerEditModal from "@/components/reports/MarkerEditModal"
+import ShapeEditModal from "@/components/reports/ShapeEditModal"
 
 const SceneMap = dynamic(() => import("@/components/reports/SceneMap"), {
     ssr: false,
     loading: () => <div className="h-full w-full bg-slate-900 animate-pulse flex items-center justify-center text-[10px] text-primary/40 uppercase tracking-widest font-mono border border-border/50 rounded">Establishing Tactical Link...</div>
 })
-
-import MarkerEditModal from "@/components/reports/MarkerEditModal"
-import ShapeEditModal from "@/components/reports/ShapeEditModal"
 
 export default function CreateReportPage() {
     return (
@@ -50,6 +50,7 @@ function CreateReportContent() {
     const [coAuthors, setCoAuthors] = useState<string[]>([])
     const [photos, setPhotos] = useState<PhotoEvidence[]>([])
     const [videos, setVideos] = useState<VideoEvidence[]>([])
+    const [linkedConfiscations, setLinkedConfiscations] = useState<any[]>([])
 
     // Modal State
     const [editingMarker, setEditingMarker] = useState<Marker | null>(null)
@@ -75,6 +76,7 @@ function CreateReportContent() {
                     const evidence = report.evidence as any || { photo: [], video: [] }
                     setPhotos(evidence.photo || [])
                     setVideos(evidence.video || [])
+                    setLinkedConfiscations(report.confiscations as any[] || [])
                 }
             }
         }
@@ -168,6 +170,7 @@ function CreateReportContent() {
                     photo: photos,
                     video: videos
                 },
+                confiscationIds: linkedConfiscations.map(c => c.id)
             }
 
             let res;
@@ -303,6 +306,21 @@ function CreateReportContent() {
                             <RichTextEditor content={content} onChange={setContent} templateCategory="REPORT" />
                         </div>
                     </section>
+
+                    {/* Confiscations */}
+                    <section className="bg-card border border-border rounded-md overflow-hidden shadow-sm">
+                        <div className="bg-muted/30 border-b border-border p-4 flex items-center gap-2">
+                            <Scale size={16} className="text-primary" />
+                            <h3 className="text-small font-black uppercase tracking-[0.2em] text-foreground">Confiscations</h3>
+                        </div>
+                        <div className="p-4">
+                            <ConfiscationLinker
+                                linkedConfiscations={linkedConfiscations}
+                                onLink={(newItems) => setLinkedConfiscations(prev => [...prev, ...newItems])}
+                                onUnlink={(id) => setLinkedConfiscations(prev => prev.filter(c => c.id !== id))}
+                            />
+                        </div>
+                    </section>
                 </div>
 
                 {/* Right Column: Map & Evidence */}
@@ -366,6 +384,7 @@ function CreateReportContent() {
                         </div>
                     </section>
                 </div>
+
             </div>
         </div>
     )
