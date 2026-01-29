@@ -84,11 +84,11 @@ export default function ConfiscationsPage() {
                                         </td>
                                         <td className="px-4 py-3">
                                             <span className="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
-                                                {dict.confiscations.types[item.drugType.toLowerCase()] || item.drugType}
+                                                {(dict.confiscations.types as any)[item.drugType.toLowerCase()] || item.drugType}
                                             </span>
                                         </td>
                                         <td className="px-4 py-3 text-right font-mono text-primary font-bold">
-                                            {item.quantity} {item.unit}
+                                            {item.quantity} g
                                         </td>
                                         <td className="px-4 py-3 text-[11px] text-muted-foreground uppercase tracking-wider">
                                             {new Date(item.createdAt).toLocaleDateString()}
@@ -96,10 +96,10 @@ export default function ConfiscationsPage() {
                                         <td className="px-4 py-3">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-6 h-6 rounded bg-muted flex items-center justify-center text-[10px] font-black">
-                                                    {item.officerName?.charAt(0)}
+                                                    {item.officer?.rpName?.charAt(0)}
                                                 </div>
                                                 <span className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground group-hover:text-foreground transition-colors">
-                                                    {item.officerName}
+                                                    {item.officer?.rpName}
                                                 </span>
                                             </div>
                                         </td>

@@ -163,6 +163,7 @@ model Confiscation {
   citizenName String?  
   drugType    String   
   quantity    Float    // Stored in grams
+  notes       String?
   
   officerId   String
   officer     User     @relation("OfficerConfiscations", fields: [officerId], references: [id])
