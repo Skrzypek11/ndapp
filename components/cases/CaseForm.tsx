@@ -146,7 +146,7 @@ export default function CaseForm({ initialData, onSubmit, loading, isAdmin }: Ca
                         <label className="text-[10px] font-black uppercase tracking-widest text-primary/70 px-1">{dict.cases.form.fields.lead}</label>
                         {isAdmin ? (
                             <div className="bg-primary/5 border border-dashed border-primary/30 rounded-lg p-4 flex items-center justify-center text-[10px] font-black text-primary italic uppercase tracking-widest text-center h-[58px]">
-                                LEAD ASSIGNMENT VIA REVIEW PROTOCOL
+                                {dict.cases.form.lead_assignment_protocol}
                             </div>
                         ) : (
                             <div className="flex items-center gap-4 bg-primary/5 p-4 rounded-lg border border-primary/20 shadow-inner">

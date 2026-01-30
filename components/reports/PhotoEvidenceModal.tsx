@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input"
 import { PhotoEvidence, Marker } from "@/lib/store/reports"
 import { getUsers } from "@/app/actions/user"
 import { Camera, User, Users, Clock, Link as LinkIcon, Upload, X } from "lucide-react"
+import { useTranslation } from "@/lib/i18n"
 
 interface PhotoEvidenceModalProps {
     isOpen: boolean
@@ -29,6 +30,7 @@ export default function PhotoEvidenceModal({
     initialData,
     availableMarkers
 }: PhotoEvidenceModalProps) {
+    const { dict } = useTranslation()
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [timestamp, setTimestamp] = useState("") // datetime-local
@@ -170,28 +172,28 @@ export default function PhotoEvidenceModal({
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title={initialData ? "Edit Photo Evidence" : "New Photo Evidence Entry"}
+            title={initialData ? dict.reports.photo_modal.title_edit : dict.reports.photo_modal.title_new}
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-2">
 
                 {/* LEFT COLUMN: Metadata */}
                 <div className="space-y-6">
                     <section className="space-y-4">
-                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">Essential Intel</label>
+                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">{dict.reports.photo_modal.section_intelligence}</label>
 
                         <div>
-                            <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">Evidence Title *</label>
+                            <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">{dict.reports.photo_modal.field_title} *</label>
                             <Input
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
-                                placeholder="e.g., SEIZED NARCOTICS ON TABLE"
+                                placeholder={dict.reports.photo_modal.placeholder_title}
                                 className="uppercase font-mono text-xs"
                             />
                         </div>
 
                         <div>
                             <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80 flex items-center gap-2">
-                                <Clock size={10} /> Capture Timestamp *
+                                <Clock size={10} /> {dict.reports.photo_modal.field_timestamp} *
                             </label>
                             <input
                                 type="datetime-local"
@@ -202,45 +204,45 @@ export default function PhotoEvidenceModal({
                         </div>
 
                         <div>
-                            <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">Narrative Description</label>
+                            <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">{dict.reports.photo_modal.field_description}</label>
                             <textarea
                                 value={description}
                                 onChange={e => setDescription(e.target.value)}
-                                placeholder="Contextual details for this photograph..."
+                                placeholder={dict.reports.photo_modal.placeholder_description}
                                 className="w-full bg-slate-900 border border-border rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary/50 min-h-[80px] resize-none"
                             />
                         </div>
                     </section> section
 
                     <section className="space-y-4">
-                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">Origin & Chain of Custody</label>
+                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">{dict.reports.photo_modal.section_origin}</label>
 
                         <div className="flex bg-slate-900 p-1 rounded-md border border-border">
                             <button
                                 onClick={() => setCaptureMode('INTERNAL')}
                                 className={`flex-1 py-1.5 text-[10px] font-bold uppercase rounded transition-all ${captureMode === 'INTERNAL' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-white/40 hover:text-white'}`}
                             >
-                                Internal Officer
+                                {dict.reports.photo_modal.capture_mode.internal}
                             </button>
                             <button
                                 onClick={() => setCaptureMode('EXTERNAL')}
                                 className={`flex-1 py-1.5 text-[10px] font-bold uppercase rounded transition-all ${captureMode === 'EXTERNAL' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-white/40 hover:text-white'}`}
                             >
-                                External Source
+                                {dict.reports.photo_modal.capture_mode.external}
                             </button>
                         </div>
 
                         {captureMode === 'INTERNAL' ? (
                             <div>
                                 <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80 flex items-center gap-2">
-                                    <User size={10} /> Selecting Officer *
+                                    <User size={10} /> {dict.reports.photo_modal.field_officer} *
                                 </label>
                                 <select
                                     value={officerId}
                                     onChange={e => setOfficerId(e.target.value)}
                                     className="w-full bg-slate-900 border border-border rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary/50 font-mono"
                                 >
-                                    <option value="">Select Officer...</option>
+                                    <option value="">{dict.reports.photo_modal.placeholder_officer}</option>
                                     {agents.map(agent => (
                                         <option key={agent.id} value={agent.id}>{agent.badge} - {agent.name}</option>
                                     ))}
@@ -249,19 +251,19 @@ export default function PhotoEvidenceModal({
                         ) : (
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="col-span-2">
-                                    <label className="text-[10px] font-bold uppercase mb-1 block px-1 opacity-60">Full Name *</label>
+                                    <label className="text-[10px] font-bold uppercase mb-1 block px-1 opacity-60">{dict.reports.photo_modal.field_external_name} *</label>
                                     <Input value={externalName} onChange={e => setExternalName(e.target.value.toUpperCase())} className="text-[10px] h-7 font-mono" />
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-bold uppercase mb-1 block px-1 opacity-60">Affiliation</label>
+                                    <label className="text-[10px] font-bold uppercase mb-1 block px-1 opacity-60">{dict.reports.photo_modal.field_external_affiliation}</label>
                                     <Input value={externalAffiliation} onChange={e => setExternalAffiliation(e.target.value.toUpperCase())} className="text-[10px] h-7 font-mono" />
                                 </div>
                                 <div>
-                                    <label className="text-[10px] font-bold uppercase mb-1 block px-1 opacity-60">Badge/ID</label>
+                                    <label className="text-[10px] font-bold uppercase mb-1 block px-1 opacity-60">{dict.reports.photo_modal.field_external_badge}</label>
                                     <Input value={externalBadge} onChange={e => setExternalBadge(e.target.value.toUpperCase())} className="text-[10px] h-7 font-mono" />
                                 </div>
                                 <div className="col-span-2">
-                                    <label className="text-[10px] font-bold uppercase mb-1 block px-1 opacity-60">Contact (Phone/Email)</label>
+                                    <label className="text-[10px] font-bold uppercase mb-1 block px-1 opacity-60">{dict.reports.photo_modal.field_external_contact}</label>
                                     <Input value={externalContact} onChange={e => setExternalContact(e.target.value)} className="text-[10px] h-7" />
                                 </div>
                             </div>
@@ -272,7 +274,7 @@ export default function PhotoEvidenceModal({
                 {/* RIGHT COLUMN: File & Markers */}
                 <div className="space-y-6">
                     <section className="space-y-4">
-                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">Visual Asset</label>
+                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">{dict.reports.photo_modal.section_visual}</label>
 
                         <div className="relative aspect-video bg-slate-950 rounded-lg border-2 border-dashed border-border flex flex-col items-center justify-center p-4 group overflow-hidden transition-colors hover:border-primary/40">
                             {previewUrl ? (
@@ -291,8 +293,8 @@ export default function PhotoEvidenceModal({
                             ) : (
                                 <>
                                     <Camera size={40} className="text-primary/20 mb-2" />
-                                    <div className="text-[10px] font-bold uppercase text-white/40 mb-1">Upload Photo Evidence</div>
-                                    <div className="text-[8px] text-white/20">Click here or drag and drop</div>
+                                    <div className="text-[10px] font-bold uppercase text-white/40 mb-1">{dict.reports.photo_modal.upload_label}</div>
+                                    <div className="text-[8px] text-white/20">{dict.reports.photo_modal.upload_hint}</div>
                                     <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleFileUpload} />
                                 </>
                             )}
@@ -318,15 +320,15 @@ export default function PhotoEvidenceModal({
                                 )
                             }) : (
                                 <div className="text-[10px] text-white/20 italic w-full text-center py-4">
-                                    No tactical markers deployed on map
+                                    {dict.reports.photo_modal.no_markers}
                                 </div>
                             )}
                         </div>
                     </section>
 
                     <div className="pt-4 flex justify-end gap-3 mt-auto">
-                        <Button variant="ghost" size="sm" onClick={onClose}>Cancel</Button>
-                        <Button variant="primary" size="md" onClick={handleSave} icon={Camera}>Save Asset</Button>
+                        <Button variant="ghost" size="sm" onClick={onClose}>{dict.reports.photo_modal.buttons.cancel}</Button>
+                        <Button variant="primary" size="md" onClick={handleSave} icon={Camera}>{dict.reports.photo_modal.buttons.save}</Button>
                     </div>
                 </div>
 

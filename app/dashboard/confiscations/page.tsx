@@ -47,15 +47,15 @@ export default function ConfiscationsPage() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
                         <input
                             type="text"
-                            placeholder="FILTER REGISTRY..."
+                            placeholder={dict.confiscations.filter_placeholder}
                             className="w-full bg-background border border-border rounded pl-9 pr-4 py-2 text-[11px] font-bold uppercase tracking-wider focus:outline-none focus:border-primary/50 transition-colors"
                         />
                     </div>
                 </div>
 
                 {loading ? (
-                    <div className="p-12 text-center text-muted-foreground animate-pulse">
-                        LOADING REGISTRY DATA...
+                    <div className="p-12 text-center text-muted-foreground animate-pulse uppercase">
+                        {dict.confiscations.loading}
                     </div>
                 ) : confiscations.length === 0 ? (
                     <div className="p-12 text-center text-muted-foreground flex flex-col items-center gap-4">
@@ -80,7 +80,7 @@ export default function ConfiscationsPage() {
                                 {confiscations.map((item) => (
                                     <tr key={item.id} className="border-b border-border/50 hover:bg-muted/5 transition-colors group">
                                         <td className="px-4 py-3 font-medium text-foreground text-small">
-                                            {item.citizenName || "Unknown"}
+                                            {item.citizenName || dict.common.unknown}
                                         </td>
                                         <td className="px-4 py-3">
                                             <span className="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">

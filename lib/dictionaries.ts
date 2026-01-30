@@ -136,9 +136,13 @@ export const en = {
         status: {
             draft: "DRAFT",
             submitted: "SUBMITTED",
+            pending: "PENDING",
+            rejected: "REJECTED",
+            underreview: "UNDER REVIEW",
             under_review: "UNDER REVIEW",
             approved: "APPROVED",
-            revisions: "REVISION REQ."
+            revisions: "REVISION REQ.",
+            underinvestigation: "UNDER INVESTIGATION"
         },
         form: {
             title: "Field Report Dossier",
@@ -149,6 +153,7 @@ export const en = {
             draft_id: "DRAFT ID",
             pending: "PENDING",
             officer: "OFFICER",
+            confiscations: "Confiscations",
             save_draft: "Save Draft",
             submit: "Submit Report",
             personnel: "Involved Personnel",
@@ -159,7 +164,13 @@ export const en = {
             map_title: "Tactical Operations Map",
             map_hint: "Click map to deploy intel markers.",
             scene_map: "Tactical Map",
-            evidence: "Evidence Locker"
+            evidence: "Evidence Locker",
+            no_coauthors: "No co-authors selected",
+            add_remove_coauthors: "Add / Remove Co-Authors",
+            select_officers: "Select Participating Officers",
+            search_placeholder: "Search by name or badge...",
+            loading_personnel: "Loading Personnel Database...",
+            no_officers: "No officers found"
         },
         list: {
             title: "Field Reports Dashboard",
@@ -198,7 +209,16 @@ export const en = {
             videos: "Video Assets",
             timestamp: "Timestamp",
             source: "Source",
-            registry: "Intelligence Asset Registry"
+            registry: "Intelligence Asset Registry",
+            photo_locker: "Photo Locker",
+            video_locker: "Video Locker",
+            new_entry: "New Entry",
+            photo: "PHOTO",
+            video: "VIDEO",
+            taken: "Taken",
+            by: "By",
+            no_photos: "No Photos Registered",
+            no_videos: "No Videos Registered"
         },
         review_panel: {
             title: "Review Decision Panel",
@@ -215,12 +235,85 @@ export const en = {
             confirm: "Confirm Decision",
             confirm_error: "Rejection reason is required"
         },
+        video_modal: {
+            title_new: "New Video Asset Entry",
+            title_edit: "Edit Video Evidence",
+            section_intelligence: "Asset Intelligence",
+            section_forensic: "Forensic Retrieval",
+            section_location: "Digital Location",
+            section_linkage: "Tactical Marker Linkage",
+            field_title: "Video Title",
+            field_source: "Source Type",
+            field_duration: "Duration",
+            field_timestamp: "Event Timestamp",
+            field_description: "Narrative Description",
+            field_url: "Forensic Host URL",
+            source_types: {
+                bodycam: "Bodycam",
+                dashcam: "Dashcam",
+                surveillance: "Surveillance",
+                civilian: "Civilian Recording",
+                undercover: "Undercover",
+                drone: "Drone",
+                other: "Other"
+            },
+            capture_mode: {
+                internal: "Internal Officer",
+                external: "External Source"
+            },
+            placeholder_search: "Select Personnel...",
+            buttons: {
+                register: "Register Video",
+                cancel: "Cancel"
+            },
+            alerts: {
+                validated: "VALIDATED LINK DETECTED",
+                no_markers: "No tactical markers deployed on map"
+            }
+        },
+        photo_modal: {
+            title_new: "New Photo Evidence Entry",
+            title_edit: "Edit Photo Evidence",
+            section_intelligence: "Essential Intel",
+            section_origin: "Origin & Chain of Custody",
+            section_visual: "Visual Asset",
+            section_linkage: "Tactical Marker Linkage",
+            field_title: "Evidence Title",
+            placeholder_title: "e.g., SEIZED NARCOTICS ON TABLE",
+            field_timestamp: "Capture Timestamp",
+            field_description: "Narrative Description",
+            placeholder_description: "Contextual details for this photograph...",
+            capture_mode: {
+                internal: "Internal Officer",
+                external: "External Source"
+            },
+            field_officer: "Selecting Officer",
+            placeholder_officer: "Select Officer...",
+            field_external_name: "Full Name",
+            field_external_affiliation: "Affiliation",
+            field_external_badge: "Badge/ID",
+            field_external_contact: "Contact (Phone/Email)",
+            upload_label: "Upload Photo Evidence",
+            upload_hint: "Click here or drag and drop",
+            no_markers: "No tactical markers deployed on map",
+            buttons: {
+                save: "Save Asset",
+                cancel: "Cancel"
+            }
+        },
+        tactical_map: {
+            legend: "Tactical Map Legend",
+            placeholder: "Define {color} marker meaning...",
+            incomplete: "(Incomplete - Will not export)"
+        }
     },
     confiscations: {
         title: "Drug Confiscations",
         subtitle: "Seized Contraband Registry",
         create: "Log Confiscation",
         create_header: "New Confiscation Log",
+        filter_placeholder: "Filter Registry...",
+        loading: "Loading Registry Data...",
         list: {
             citizen: "Citizen / Subject",
             drug: "Substance",
@@ -248,6 +341,17 @@ export const en = {
             heroina: "Heroin",
             lsd: "LSD",
             inne: "Other"
+        },
+        linker: {
+            button: "Link Confiscation",
+            modal_title: "Link Confiscation",
+            search_placeholder: "Search by Citizen Name...",
+            searching: "Searching...",
+            no_results: "No unlinked confiscations found",
+            type_to_search: "Type to search...",
+            link_selected: "Link Selected",
+            no_linked: "No confiscations linked",
+            unknown_citizen: "Unknown Citizen"
         }
     },
     admin_panel: {
@@ -316,7 +420,8 @@ export const en = {
     announcements: {
         title: "Announcements Terminal",
         subtitle: "Official Operational Communications",
-        create: "New Announcement",
+        create: "Publish Announcement", /* Changed from New Announcement to match button often used */
+        create_modal: "Publish Operational Intel",
         no_announcements: "No announcements found in bulletin",
         filter: {
             all: "ALL",
@@ -334,8 +439,11 @@ export const en = {
         },
         form: {
             title: "Title",
+            title_placeholder: "OPERATION_CODENAME / INTEL_TITLE",
             body: "Content",
+            body_placeholder: "Type operational intel content here...",
             priority: "Priority",
+            assigned: "ASSIGNED", /* Added for badge */
             pinned: "Pin to top",
             publish: "Publish",
             save_draft: "Save Draft"
@@ -351,14 +459,36 @@ export const en = {
         delete_confirm: "Are you sure you want to delete this announcement?"
     },
     kompendium: {
+        form: {
+            title: "Operational Intel Registration",
+            doc_title: "Documentation Title",
+            placeholder_title: "Enter Title...",
+            category: "Registry Category",
+            placeholder_category: "e.g. Law Enforcement / Protocols",
+            content: "Intelligence Dossier Content",
+            placeholder_content: "Type documentation content here...",
+            tags: "Security Tags (Comma separated)",
+            placeholder_tags: "e.g. RESTRICTED, CODED, LEVEL_3",
+            cancel: "Abort Registration",
+            submit: "Seal & Register Protocol",
+            processing: "Processing..."
+        },
         title: "Division Kompendium",
         subtitle: "Knowledge Base & Operational Protocols",
+        library_index: "Library Index",
+        all_records: "All Records",
+        register_intel: "Register Intel",
+        available_intelligence: "Available Intelligence",
+        entries_found: "Entries found",
         no_docs: "No documents found in registry",
         search: "Search protocols...",
         toc: "Table of Contents",
         author: "Author",
         date: "Date",
-        tags: "Tags"
+        tags: "Tags",
+        create: "Register Intel",
+        back_to_library: "Back to Library",
+        delete_confirm: "Are you sure you want to delete this document?"
     },
     roster: {
         title: "Division Roster",
@@ -465,6 +595,7 @@ export const en = {
             header: "Initialize New Case",
             edit_header: "Edit Case Dossier",
             network: "Internal Intelligence Network - Central Bureau",
+            lead_assignment_protocol: "LEAD ASSIGNMENT VIA REVIEW PROTOCOL",
             fields: {
                 title: "Operation Codename",
                 lead: "Lead Investigator",
@@ -528,7 +659,27 @@ export const en = {
             delete_confirm: "Are you sure you want to delete this template?",
             no_templates: "No templates defined",
             last_updated: "Last Updated",
-            warning: "Warning: Inserting a template will overwrite current content."
+            warning: "Warning: Inserting a template will overwrite current content.",
+            groups: {
+                report: "REPORT Templates",
+                case: "CASE Templates",
+                kompendium: "KOMPENDIUM Templates"
+            },
+            context_types: {
+                report: "Report",
+                case: "Case",
+                kompendium: "Kompendium"
+            }
+        },
+        drugs: {
+            title: "Substance Registry",
+            create: "Add To Registry",
+            name: "Substance Name",
+            placeholder: "e.g. Fentanyl",
+            active_substances: "Active Substances",
+            loading: "Loading Registry...",
+            no_substances: "No substances defined. Add one to get started.",
+            delete_confirm: "Are you sure you want to delete this substance?"
         }
     }
 }
@@ -540,6 +691,8 @@ export const pl = {
         cancel: "Anuluj",
         actions: "Akcje",
         confirm: "Potwierdź",
+        unknown: "Nieznany",
+        no_results: "Brak wyników"
     },
     auth: {
         title: "Wydział Narkotykowy",
@@ -669,9 +822,13 @@ export const pl = {
         status: {
             draft: "SZKIC",
             submitted: "WYSŁANY",
+            pending: "OCZEKUJĄCY",
+            rejected: "ODRZUCONY",
+            underreview: "WERYFIKACJA",
             under_review: "WERYFIKACJA",
             approved: "ZATWIERDZONY",
-            revisions: "WYMAGA POPRAWY"
+            revisions: "WYMAGA POPRAWY",
+            underinvestigation: "W TOKU DOCHODZENIA"
         },
         form: {
             title: "Akta Raportu Terenowego",
@@ -682,6 +839,7 @@ export const pl = {
             draft_id: "ID SZKICU",
             pending: "OCZEKUJĄCY",
             officer: "FUNKCJONARIUSZ",
+            confiscations: "Konfiskaty",
             save_draft: "Zapisz Szkic",
             submit: "Prześlij Raport",
             personnel: "Zaangażowany Personel",
@@ -692,7 +850,13 @@ export const pl = {
             map_title: "Mapa Taktyczno-Operacyjna",
             map_hint: "Kliknij mapę, aby rozmieścić znaczniki wywiadowcze.",
             scene_map: "Mapa Taktyczna",
-            evidence: "Szafka Dowodowa"
+            evidence: "Szafka Dowodowa",
+            no_coauthors: "Brak wybranych współautorów",
+            add_remove_coauthors: "Dodaj / Usuń Współautorów",
+            select_officers: "Wybierz Funkcjonariuszy",
+            search_placeholder: "Szukaj po nazwisku lub odznace...",
+            loading_personnel: "Ładowanie Bazy Personelu...",
+            no_officers: "Nie znaleziono funkcjonariuszy"
         },
         list: {
             title: "Dashboard Raportów Terenowych",
@@ -731,7 +895,16 @@ export const pl = {
             videos: "Zasoby Wideo",
             timestamp: "Sygnatura Czasowa",
             source: "Źródło",
-            registry: "Rejestr Aktywów Wywiadowczych"
+            registry: "Rejestr Aktywów Wywiadowczych",
+            photo_locker: "Szafka Dowodowa (Zdjęcia)",
+            video_locker: "Szafka Dowodowa (Wideo)",
+            new_entry: "Nowy Wpis",
+            photo: "ZDJĘCIE",
+            video: "WIDEO",
+            taken: "Zarejestrowano",
+            by: "Przez",
+            no_photos: "Brak zarejestrowanych zdjęć",
+            no_videos: "Brak zarejestrowanych nagrań"
         },
         review_panel: {
             title: "Panel Decyzji Recenzji",
@@ -748,12 +921,80 @@ export const pl = {
             confirm: "Potwierdź Decyzję",
             confirm_error: "Powód odrzucenia jest wymagany"
         },
+        video_modal: {
+            title_new: "Nowy Zasób Wideo",
+            title_edit: "Edycja Dowodu Wideo",
+            section_intelligence: "Dane Wywiadowcze",
+            section_forensic: "Odzyskiwanie Kryminalistyczne",
+            section_location: "Lokalizacja Cyfrowa",
+            section_linkage: "Powiązanie Znaczników Taktycznych",
+            field_title: "Tytuł Wideo",
+            field_source: "Typ Źródła",
+            field_duration: "Czas Trwania",
+            field_timestamp: "Sygnatura Czasowa Zdarzenia",
+            field_description: "Opis Narracyjny",
+            field_url: "Adres URL Hosta Kryminalistycznego",
+            source_types: {
+                // ... same as en
+            },
+            capture_mode: {
+                internal: "Funkcjonariusz Wewnętrzny",
+                external: "Źródło Zewnętrzne"
+            },
+            placeholder_search: "Wybierz Personel...",
+            buttons: {
+                register: "Zarejestruj Wideo",
+                cancel: "Anuluj"
+            },
+            alerts: {
+                validated: "WYKRYTO ZWALIDOWANY LINK",
+                no_markers: "Brak znaczników taktycznych na mapie"
+            }
+        },
+        photo_modal: {
+            title_new: "Nowy Wpis Dowodowy (Zdjęcie)",
+            title_edit: "Edycja Dowodu (Zdjęcie)",
+            section_intelligence: "Dane Wywiadowcze",
+            section_origin: "Pochodzenie i Łańcuch Dowodowy",
+            section_visual: "Materiał Wizualny",
+            section_linkage: "Powiązanie Znaczników Taktycznych",
+            field_title: "Tytuł Dowodu",
+            placeholder_title: "np. ZABEZPIECZONE NARKOTYKI NA STOLE",
+            field_timestamp: "Czas Rejestracji",
+            field_description: "Opis Narracyjny",
+            placeholder_description: "Szczegóły kontekstowe dla tego zdjęcia...",
+            capture_mode: {
+                internal: "Funkcjonariusz Wewnętrzny",
+                external: "Źródło Zewnętrzne"
+            },
+            field_officer: "Wybierający Funkcjonariusz",
+            placeholder_officer: "Wybierz Funkcjonariusza...",
+            field_external_name: "Imię i Nazwisko",
+            field_external_affiliation: "Afiliacja",
+            field_external_badge: "Odznaka/ID",
+            field_external_contact: "Kontakt (Tel/Email)",
+            upload_label: "Prześlij Dowód Zdjęciowy",
+            upload_hint: "Kliknij tutaj lub przeciągnij i upuść",
+            no_markers: "Brak znaczników taktycznych na mapie",
+            buttons: {
+                save: "Zapisz Zasób",
+                cancel: "Anuluj"
+            }
+        },
+        tactical_map: {
+            legend: "Legenda Mapy Taktycznej",
+            placeholder: "Zdefiniuj znaczenie markera {color}...",
+            incomplete: "(Niekompletne - Nie zostanie wyeksportowane)"
+        }
     },
+
     confiscations: {
         title: "Konfiskaty",
         subtitle: "Rejestr Zarekwirowanych Substancji",
         create: "Zarejestruj Konfiskatę",
         create_header: "Nowy Wpis Konfiskaty",
+        filter_placeholder: "Filtruj Rejestr...",
+        loading: "Ładowanie danych...",
         list: {
             citizen: "Obywatel / Podejrzany",
             drug: "Substancja",
@@ -781,6 +1022,17 @@ export const pl = {
             heroina: "Heroina",
             lsd: "LSD",
             inne: "Inne"
+        },
+        linker: {
+            button: "Połącz Konfiskatę",
+            modal_title: "Połącz Konfiskatę",
+            search_placeholder: "Szukaj po nazwisku...",
+            searching: "Szukanie...",
+            no_results: "Nie znaleziono niepowiązanych konfiskat",
+            type_to_search: "Wpisz aby wyszukać...",
+            link_selected: "Połącz Wybrane",
+            no_linked: "Brak powiązanych konfiskat",
+            unknown_citizen: "Nieznany Obywatel"
         }
     },
     admin_panel: {
@@ -884,14 +1136,36 @@ export const pl = {
         delete_confirm: "Czy na pewno chcesz usunąć to ogłoszenie?"
     },
     kompendium: {
+        form: {
+            title: "Rejestracja Wywiadu Operacyjnego",
+            doc_title: "Tytuł Dokumentacji",
+            placeholder_title: "Wprowadź tytuł...",
+            category: "Kategoria Rejestru",
+            placeholder_category: "np. Procedury / Protokoły",
+            content: "Treść Dokumentacji",
+            placeholder_content: "Wpisz treść tutaj...",
+            tags: "Tagi Bezpieczeństwa",
+            placeholder_tags: "np. TAJNE, KODOWANE",
+            cancel: "Anuluj",
+            submit: "Zarejestruj Protokół",
+            processing: "Przetwarzanie..."
+        },
         title: "Kompendium Jednostki",
         subtitle: "Baza Wiedzy i Protokoły Operacyjne",
+        library_index: "Indeks Biblioteki",
+        all_records: "Wszystkie Wpisy",
+        available_intel: "Dostępne Dane",
+        entries_found: "Znaleziono",
+        delete: "Usuń Protokół",
         no_docs: "Nie znaleziono dokumentów w rejestrze",
         search: "Szukaj protokołów...",
         toc: "Spis Treści",
         author: "Autor",
         date: "Data",
-        tags: "Tagi"
+        tags: "Tagi",
+        create: "Rejestracja",
+        back_to_library: "Powrót do Biblioteki",
+        delete_confirm: "Czy na pewno usunąć ten dokument?"
     },
     roster: {
         title: "Lista Jednostki",
@@ -998,6 +1272,7 @@ export const pl = {
             header: "Zainicjuj Nową Sprawę",
             edit_header: "Edytuj Akta Sprawy",
             network: "Wewnętrzna Sieć Wywiadowcza - Biuro Centralne",
+            lead_assignment_protocol: "PRZYPISANIE PROWADZĄCEGO PRZEZ PROTOKÓŁ RECENZJI",
             fields: {
                 title: "Kryptonim Operacji",
                 lead: "Główny Śledczy",
@@ -1061,7 +1336,27 @@ export const pl = {
             delete_confirm: "Czy na pewno chcesz usunąć ten szablon?",
             no_templates: "Brak zdefiniowanych szablonów",
             last_updated: "Ostatnia Aktualizacja",
-            warning: "Uwaga: Wstawienie szablonu nadpisze obecną treść."
+            warning: "Uwaga: Wstawienie szablonu nadpisze obecną treść.",
+            groups: {
+                report: "Szablony RAPORTÓW",
+                case: "Szablony SPRAW",
+                kompendium: "Szablony KOMPENDIUM"
+            },
+            context_types: {
+                report: "Raport",
+                case: "Sprawa",
+                kompendium: "Kompendium"
+            }
+        },
+        drugs: {
+            title: "Rejestr Substancji",
+            create: "Dodaj do Rejestru",
+            name: "Nazwa Substancji",
+            placeholder: "np. Fentanyl",
+            active_substances: "Aktywne Substancje",
+            loading: "Ładowanie Rejestru...",
+            no_substances: "Brak zdefiniowanych substancji. Dodaj nową, aby rozpocząć.",
+            delete_confirm: "Czy na pewno chcesz usunąć tę substancję?"
         }
     }
 }

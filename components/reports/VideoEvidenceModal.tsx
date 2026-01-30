@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { VideoEvidence, VideoSourceType, Marker } from "@/lib/store/reports"
 import { getUsers } from "@/app/actions/user"
+import { useTranslation } from "@/lib/i18n"
 import { Video, User, Clock, Link as LinkIcon, Globe, Info, PlayCircle } from "lucide-react"
 
 interface VideoEvidenceModalProps {
@@ -39,6 +40,7 @@ export default function VideoEvidenceModal({
     initialData,
     availableMarkers
 }: VideoEvidenceModalProps) {
+    const { dict } = useTranslation()
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [sourceType, setSourceType] = useState<VideoSourceType>('BODYCAM')
@@ -53,6 +55,16 @@ export default function VideoEvidenceModal({
     const [linkedMarkerIds, setLinkedMarkerIds] = useState<string[]>([])
     const [url, setUrl] = useState("")
     const [agents, setAgents] = useState<Agent[]>([])
+
+    const SOURCE_TYPES: { label: string; value: VideoSourceType }[] = [
+        { label: dict.reports.video_modal.source_types.bodycam, value: 'BODYCAM' },
+        { label: dict.reports.video_modal.source_types.dashcam, value: 'DASHCAM' },
+        { label: dict.reports.video_modal.source_types.surveillance, value: 'SURVEILLANCE' },
+        { label: dict.reports.video_modal.source_types.civilian, value: 'CIVILIAN' },
+        { label: dict.reports.video_modal.source_types.undercover, value: 'UNDERCOVER' },
+        { label: dict.reports.video_modal.source_types.drone, value: 'DRONE' },
+        { label: dict.reports.video_modal.source_types.other, value: 'OTHER' }
+    ]
 
     useEffect(() => {
         const fetchAgents = async () => {
@@ -160,17 +172,19 @@ export default function VideoEvidenceModal({
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title={initialData ? "Edit Video Evidence" : "New Video Asset Entry"}
+            title={initialData ? dict.reports.video_modal.title_edit : dict.reports.video_modal.title_new}
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-2">
 
                 {/* LEFT COLUMN: Metadata */}
                 <div className="space-y-6">
                     <section className="space-y-4">
-                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">Asset Intelligence</label>
+                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">
+                            {dict.reports.video_modal.section_intelligence}
+                        </label>
 
                         <div>
-                            <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">Video Title *</label>
+                            <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">{dict.reports.video_modal.field_title} *</label>
                             <Input
                                 value={title}
                                 onChange={e => setTitle(e.target.value)}
@@ -181,7 +195,7 @@ export default function VideoEvidenceModal({
 
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">Source Type *</label>
+                                <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">{dict.reports.video_modal.field_source} *</label>
                                 <select
                                     value={sourceType}
                                     onChange={e => setSourceType(e.target.value as VideoSourceType)}
@@ -194,7 +208,7 @@ export default function VideoEvidenceModal({
                             </div>
                             <div>
                                 <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80 flex items-center gap-2">
-                                    <Clock size={10} /> Duration
+                                    <Clock size={10} /> {dict.reports.video_modal.field_duration}
                                 </label>
                                 <Input
                                     value={duration}
@@ -219,7 +233,7 @@ export default function VideoEvidenceModal({
 
                         <div>
                             <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80 flex items-center gap-2">
-                                <Clock size={10} /> Event Timestamp *
+                                <Clock size={10} /> {dict.reports.video_modal.field_timestamp} *
                             </label>
                             <input
                                 type="datetime-local"
@@ -230,7 +244,7 @@ export default function VideoEvidenceModal({
                         </div>
 
                         <div>
-                            <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">Narrative Description</label>
+                            <label className="text-[10px] font-bold uppercase mb-1.5 block px-1 opacity-80">{dict.reports.video_modal.field_description}</label>
                             <textarea
                                 value={description}
                                 onChange={e => setDescription(e.target.value)}
@@ -238,23 +252,25 @@ export default function VideoEvidenceModal({
                                 className="w-full bg-slate-900 border border-border rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary/50 min-h-[80px] resize-none"
                             />
                         </div>
-                    </section> section
+                    </section>
 
                     <section className="space-y-4">
-                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">Forensic Retrieval</label>
+                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">
+                            {dict.reports.video_modal.section_forensic}
+                        </label>
 
                         <div className="flex bg-slate-900 p-1 rounded-md border border-border">
                             <button
                                 onClick={() => setCaptureMode('INTERNAL')}
                                 className={`flex-1 py-1.5 text-[10px] font-bold uppercase rounded transition-all ${captureMode === 'INTERNAL' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-white/40 hover:text-white'}`}
                             >
-                                Internal Officer
+                                {dict.reports.video_modal.capture_mode.internal}
                             </button>
                             <button
                                 onClick={() => setCaptureMode('EXTERNAL')}
                                 className={`flex-1 py-1.5 text-[10px] font-bold uppercase rounded transition-all ${captureMode === 'EXTERNAL' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-white/40 hover:text-white'}`}
                             >
-                                External Source
+                                {dict.reports.video_modal.capture_mode.external}
                             </button>
                         </div>
 
@@ -268,7 +284,7 @@ export default function VideoEvidenceModal({
                                     onChange={e => setOfficerId(e.target.value)}
                                     className="w-full bg-slate-900 border border-border rounded-md px-3 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary/50 font-mono"
                                 >
-                                    <option value="">Select Personnel...</option>
+                                    <option value="">{dict.reports.video_modal.placeholder_search}</option>
                                     {agents.map(agent => (
                                         <option key={agent.id} value={agent.id}>{agent.badge} - {agent.name}</option>
                                     ))}
@@ -296,14 +312,16 @@ export default function VideoEvidenceModal({
                 {/* RIGHT COLUMN: URL & Markers */}
                 <div className="space-y-6">
                     <section className="space-y-4">
-                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">Digital Location</label>
+                        <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1">
+                            {dict.reports.video_modal.section_location}
+                        </label>
 
                         <div className="p-4 bg-slate-950 rounded-lg border-2 border-dashed border-border group transition-colors hover:border-primary/40">
                             <div className="flex items-center gap-3 mb-2">
                                 <div className="p-2 bg-primary/10 rounded-full">
                                     <Globe size={16} className="text-primary" />
                                 </div>
-                                <label className="text-[10px] font-bold uppercase text-white/60">Forensic Host URL *</label>
+                                <label className="text-[10px] font-bold uppercase text-white/60">{dict.reports.video_modal.field_url} *</label>
                             </div>
                             <Input
                                 value={url}
@@ -321,7 +339,7 @@ export default function VideoEvidenceModal({
                             <div className="flex items-center justify-center py-6 border border-border/50 rounded-lg bg-black/40">
                                 <div className="flex flex-col items-center gap-2">
                                     <PlayCircle size={40} className="text-primary/40" />
-                                    <span className="text-[10px] text-primary/40 font-mono tracking-widest">VALIDATED LINK DETECTED</span>
+                                    <span className="text-[10px] text-primary/40 font-mono tracking-widest">{dict.reports.video_modal.alerts.validated}</span>
                                 </div>
                             </div>
                         )}
@@ -329,7 +347,7 @@ export default function VideoEvidenceModal({
 
                     <section className="space-y-4">
                         <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest block border-b border-primary/10 pb-1 flex items-center gap-2">
-                            <LinkIcon size={12} /> Tactical Marker Linkage
+                            <LinkIcon size={12} /> {dict.reports.video_modal.section_linkage}
                         </label>
 
                         <div className="flex flex-wrap gap-2 max-h-[150px] overflow-y-auto p-2 bg-slate-950 rounded border border-border">
@@ -346,15 +364,15 @@ export default function VideoEvidenceModal({
                                 )
                             }) : (
                                 <div className="text-[10px] text-white/20 italic w-full text-center py-4">
-                                    No tactical markers deployed on map
+                                    {dict.reports.video_modal.alerts.no_markers}
                                 </div>
                             )}
                         </div>
                     </section>
 
                     <div className="pt-4 flex justify-end gap-3 mt-auto">
-                        <Button variant="ghost" size="sm" onClick={onClose}>Cancel</Button>
-                        <Button variant="primary" size="md" onClick={handleSave} icon={Video}>Register Video</Button>
+                        <Button variant="ghost" size="sm" onClick={onClose}>{dict.reports.video_modal.buttons.cancel}</Button>
+                        <Button variant="primary" size="md" onClick={handleSave} icon={Video}>{dict.reports.video_modal.buttons.register}</Button>
                     </div>
                 </div>
 

@@ -63,10 +63,10 @@ export default function DrugsRegistryPage() {
                 <div>
                     <h1 className="text-2xl font-black uppercase tracking-tight text-foreground flex items-center gap-3">
                         <Scale className="text-emerald-500" size={28} />
-                        {dict.admin_panel.drugs.title}
+                        {dict.admin.drugs.title}
                     </h1>
                     <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">
-                        {dict.admin_panel.subtitle}
+                        {dict.settings.title} :: {dict.admin.drugs.title}
                     </p>
                 </div>
             </div>
@@ -76,17 +76,17 @@ export default function DrugsRegistryPage() {
                 <div className="md:col-span-2 bg-card border border-border rounded-md shadow-sm overflow-hidden">
                     <div className="p-4 border-b border-border bg-muted/10">
                         <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                            Active Substances
+                            {dict.admin.drugs.active_substances}
                         </span>
                     </div>
 
                     {loading ? (
                         <div className="p-8 text-center text-muted-foreground animate-pulse text-[10px] uppercase font-bold tracking-widest">
-                            Loading Registry...
+                            {dict.admin.drugs.loading}
                         </div>
                     ) : drugs.length === 0 ? (
                         <div className="p-12 text-center text-muted-foreground italic text-[11px]">
-                            No substances defined. Add one to get started.
+                            {dict.admin.drugs.no_substances}
                         </div>
                     ) : (
                         <div className="divide-y divide-border/50">
@@ -116,19 +116,19 @@ export default function DrugsRegistryPage() {
                 <div className="bg-card border border-border rounded-md shadow-sm h-fit">
                     <div className="p-4 border-b border-border bg-muted/10">
                         <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-                            {dict.admin_panel.drugs.create}
+                            {dict.admin.drugs.create}
                         </span>
                     </div>
                     <form onSubmit={handleAdd} className="p-4 space-y-4">
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-primary/70 px-1">
-                                {dict.admin_panel.drugs.name}
+                                {dict.admin.drugs.name}
                             </label>
                             <input
                                 type="text"
                                 value={newName}
                                 onChange={e => setNewName(e.target.value)}
-                                placeholder={dict.admin_panel.drugs.placeholder}
+                                placeholder={dict.admin.drugs.placeholder}
                                 className="w-full bg-background border border-border rounded p-3 text-small focus:outline-none focus:border-emerald-500/50 transition-colors"
                             />
                         </div>
@@ -142,7 +142,7 @@ export default function DrugsRegistryPage() {
                             ) : (
                                 <Plus size={16} />
                             )}
-                            Add To Registry
+                            {dict.admin.drugs.create}
                         </button>
                     </form>
                 </div>

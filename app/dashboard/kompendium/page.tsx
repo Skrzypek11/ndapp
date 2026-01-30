@@ -56,7 +56,7 @@ export default function KompendiumPage() {
                     <div className="p-6 border-b border-border bg-muted/30 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <Layers size={18} className="text-primary" />
-                            <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-foreground italic">Library Index</h3>
+                            <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-foreground italic">{dict.kompendium.library_index}</h3>
                         </div>
                     </div>
 
@@ -69,7 +69,7 @@ export default function KompendiumPage() {
                                 }`}
                         >
                             <Archive size={14} />
-                            All Records
+                            {dict.kompendium.all_records}
                         </button>
 
                         <div className="h-px bg-border/20 mx-2 my-4" />
@@ -121,7 +121,7 @@ export default function KompendiumPage() {
                             className="btn-primary whitespace-nowrap"
                         >
                             <Plus size={16} />
-                            Register Intel
+                            {dict.kompendium.create}
                         </button>
                     )}
                 </div>
@@ -134,9 +134,9 @@ export default function KompendiumPage() {
                                 <div className="p-6 border-b border-border bg-muted/30 flex items-center justify-between shadow-sm">
                                     <div className="flex items-center gap-3">
                                         <BookOpen size={18} className="text-primary" />
-                                        <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-foreground italic">Available Intelligence</h3>
+                                        <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-foreground italic">{dict.kompendium.available_intel}</h3>
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">{filteredDocs.length} Entries found</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">{filteredDocs.length} {dict.kompendium.entries_found}</span>
                                 </div>
                                 <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
                                     {loading ? (
@@ -180,13 +180,13 @@ export default function KompendiumPage() {
                                         onClick={() => setSelectedDoc(null)}
                                         className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-all"
                                     >
-                                        <ChevronRight size={14} className="rotate-180" /> Back to Library
+                                        <ChevronRight size={14} className="rotate-180" /> {dict.kompendium.back_to_library}
                                     </button>
                                     <div className="flex items-center gap-6">
                                         {isAdmin && (
                                             <button
                                                 onClick={async () => {
-                                                    if (confirm("Are you sure you want to delete this document?")) {
+                                                    if (confirm(dict.kompendium.delete_confirm)) {
                                                         const res = await deleteCompendiumDoc(selectedDoc.id)
                                                         if (res.success) {
                                                             setSelectedDoc(null)
@@ -198,7 +198,7 @@ export default function KompendiumPage() {
                                                 }}
                                                 className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-destructive hover:text-destructive/80 transition-all border border-destructive/20 hover:bg-destructive/10 px-3 py-1.5 rounded"
                                             >
-                                                <X size={12} /> Delete Protocol
+                                                <X size={12} /> {dict.kompendium.delete}
                                             </button>
                                         )}
                                         <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-primary/60">
@@ -212,19 +212,19 @@ export default function KompendiumPage() {
                                             <h1 className="text-5xl font-black uppercase italic tracking-tighter leading-none text-foreground drop-shadow-sm">{selectedDoc.title}</h1>
                                             <div className="flex items-center gap-8 py-6 border-y border-border/10 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
                                                 <div className="flex flex-col gap-1.5">
-                                                    <span className="text-[8px] text-primary/40 leading-none">Primary Author</span>
+                                                    <span className="text-[8px] text-primary/40 leading-none">{dict.kompendium.author}</span>
                                                     <span className="flex items-center gap-2"><User size={14} className="text-primary/60" /> {selectedDoc.author.rpName}</span>
                                                 </div>
                                                 <div className="h-8 w-px bg-border/20" />
                                                 <div className="flex flex-col gap-1.5">
-                                                    <span className="text-[8px] text-primary/40 leading-none">Filing Date</span>
+                                                    <span className="text-[8px] text-primary/40 leading-none">{dict.kompendium.date}</span>
                                                     <span className="flex items-center gap-2"><Clock size={14} className="text-primary/60" /> {new Date(selectedDoc.createdAt).toLocaleString()}</span>
                                                 </div>
                                                 {selectedDoc.tags && (
                                                     <>
                                                         <div className="h-8 w-px bg-border/20" />
                                                         <div className="flex flex-col gap-1.5">
-                                                            <span className="text-[8px] text-primary/40 leading-none">Security Tags</span>
+                                                            <span className="text-[8px] text-primary/40 leading-none">{dict.kompendium.tags}</span>
                                                             <span className="flex items-center gap-2">
                                                                 <Hash size={14} className="text-primary/60" />
                                                                 <div className="flex gap-2">

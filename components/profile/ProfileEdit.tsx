@@ -88,12 +88,12 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                     {canEditBasic && (
                         <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <Upload size={24} className="text-white mb-2" />
-                            <span className="text-[9px] font-black uppercase tracking-widest text-white">Zmień awatar</span>
+                            <span className="text-[9px] font-black uppercase tracking-widest text-white">{dict.profile.edit}</span>
                         </div>
                     )}
                 </div>
                 <div className="text-center">
-                    <h3 className="text-[10px] font-black uppercase tracking-widest text-foreground">Awatar Funkcjonariusza</h3>
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-foreground">{dict.settings.account.profile_header}</h3>
                     <p className="text-[9px] text-muted-foreground uppercase tracking-wider mt-1">Kwadrat 1:1, min. 512x512px</p>
                 </div>
             </div>
@@ -102,13 +102,13 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                 {/* Tactical Identity (Protected) */}
                 <div className="space-y-6">
                     <div className="flex items-center gap-4 mb-2">
-                        <h4 className="text-[10px] font-black uppercase tracking-[.3em] text-primary/40 whitespace-nowrap text-left">Dane Służbowe</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-[.3em] text-primary/40 whitespace-nowrap text-left">{dict.profile.fields.status}</h4>
                         <div className="h-px w-full bg-gradient-to-r from-primary/10 to-transparent" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <InputLabel>Imię</InputLabel>
+                            <InputLabel>{dict.profile.fields.first_name}</InputLabel>
                             <input
                                 type="text"
                                 value={formData.firstName}
@@ -118,7 +118,7 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                             />
                         </div>
                         <div>
-                            <InputLabel>Nazwisko</InputLabel>
+                            <InputLabel>{dict.profile.fields.last_name}</InputLabel>
                             <input
                                 type="text"
                                 value={formData.lastName}
@@ -131,7 +131,7 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <InputLabel><BadgeCheck size={10} /> Numer Odznaki</InputLabel>
+                            <InputLabel><BadgeCheck size={10} /> {dict.profile.fields.badge}</InputLabel>
                             <input
                                 type="text"
                                 value={formData.badgeNumber}
@@ -141,7 +141,7 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                             />
                         </div>
                         <div>
-                            <InputLabel><Shield size={10} /> Stopień</InputLabel>
+                            <InputLabel><Shield size={10} /> {dict.profile.fields.rank}</InputLabel>
                             <div className="w-full bg-[#0D0F0F] border border-white/[0.08] rounded px-3 py-2 text-xs font-bold uppercase tracking-tight text-foreground/50 cursor-not-allowed">
                                 {ranks.find(r => r.id === formData.rankId)?.name || "Nieznany"}
                             </div>
@@ -149,17 +149,17 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                     </div>
 
                     <div>
-                        <InputLabel><Activity size={10} /> Status Służbowy</InputLabel>
+                        <InputLabel><Activity size={10} /> {dict.profile.fields.status}</InputLabel>
                         <select
                             value={formData.status}
                             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                             disabled={!canEditBasic}
                             className="w-full bg-[#0D0F0F] border border-white/[0.08] rounded px-3 py-2 text-xs font-bold uppercase tracking-tight text-foreground focus:outline-none focus:border-primary/50 disabled:opacity-50 transition-colors"
                         >
-                            <option value="Active">Aktywny</option>
-                            <option value="Leave">Na Urlopie</option>
-                            <option value="Rest">Odpoczynek</option>
-                            <option value="Suspended" disabled={!isAdmin}>Zawieszony</option>
+                            <option value="Active">{dict.profile.status.active}</option>
+                            <option value="Leave">{dict.profile.status.leave}</option>
+                            <option value="Rest">{dict.profile.status.rest}</option>
+                            <option value="Suspended" disabled={!isAdmin}>{dict.profile.status.suspended}</option>
                         </select>
                     </div>
                 </div>
@@ -167,12 +167,12 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                 {/* Contact & Operations */}
                 <div className="space-y-6">
                     <div className="flex items-center gap-4 mb-2">
-                        <h4 className="text-[10px] font-black uppercase tracking-[.3em] text-primary/40 whitespace-nowrap text-left">Dane Kontaktowe</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-[.3em] text-primary/40 whitespace-nowrap text-left">{dict.profile.fields.phone}</h4>
                         <div className="h-px w-full bg-gradient-to-r from-primary/10 to-transparent" />
                     </div>
 
                     <div>
-                        <InputLabel><Phone size={10} /> Telefon</InputLabel>
+                        <InputLabel><Phone size={10} /> {dict.profile.fields.phone}</InputLabel>
                         <input
                             type="text"
                             value={formData.phoneNumber}
@@ -184,7 +184,7 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                     </div>
 
                     <div>
-                        <InputLabel><Mail size={10} /> Email Kontaktowy</InputLabel>
+                        <InputLabel><Mail size={10} /> {dict.profile.fields.email}</InputLabel>
                         <input
                             type="email"
                             value={formData.email}
@@ -196,7 +196,7 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                     </div>
 
                     <div>
-                        <InputLabel>Przydział Jednostki</InputLabel>
+                        <InputLabel>{dict.profile.fields.unit}</InputLabel>
                         <input
                             type="text"
                             value={formData.unitAssignment}
@@ -209,7 +209,7 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                 </div>
 
                 <div className="md:col-span-2 space-y-4">
-                    <InputLabel>Notatki Funkcjonariusza</InputLabel>
+                    <InputLabel>{dict.profile.fields.notes}</InputLabel>
                     <textarea
                         value={formData.notes}
                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
@@ -230,7 +230,7 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                     className="flex-1 py-3 bg-white/[0.03] border border-white/[0.08] text-muted-foreground hover:text-foreground hover:bg-white/[0.08] rounded-md transition-all text-xs font-black uppercase tracking-[.2em] flex items-center justify-center gap-2 active:scale-[0.98]"
                 >
                     <X size={14} />
-                    Anuluj
+                    {dict.common.cancel}
                 </button>
                 <button
                     type="submit"
@@ -238,7 +238,7 @@ export default function ProfileEdit({ profile, isSelf, isAdmin, onCancel, onSave
                     className="flex-1 py-3 bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 rounded-md transition-all text-xs font-black uppercase tracking-[.2em] flex items-center justify-center gap-2 active:scale-[0.98] shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)]"
                 >
                     {loading ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-                    Zapisz Zmiany
+                    {dict.common.save}
                 </button>
             </div>
 

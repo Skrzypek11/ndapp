@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Image as ImageIcon, Video, Plus, X, Upload, Link as LinkIcon } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
+import { useTranslation } from "@/lib/i18n"
 import PhotoEvidenceModal from "./PhotoEvidenceModal"
 import VideoEvidenceModal from "./VideoEvidenceModal"
 import { PhotoEvidence, VideoEvidence, Marker } from "@/lib/store/reports"
@@ -24,6 +25,7 @@ interface Agent {
 }
 
 export default function EvidenceManager({ photos, videos, markers, onPhotosChange, onVideosChange }: EvidenceManagerProps) {
+    const { dict } = useTranslation()
     const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false)
     const [editingPhoto, setEditingPhoto] = useState<PhotoEvidence | null>(null)
     const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
@@ -112,7 +114,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                 <div className="flex items-center justify-between mb-3">
                     <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest flex items-center gap-2">
                         <ImageIcon size={14} />
-                        Photo Locker
+                        {dict.reports.view.photo_locker}
                     </label>
                     <Button
                         onClick={() => setIsPhotoModalOpen(true)}
@@ -120,7 +122,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                         size="sm"
                         icon={Plus}
                     >
-                        New Entry
+                        {dict.reports.view.new_entry}
                     </Button>
                 </div>
 
@@ -136,7 +138,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                                     <div className="relative aspect-square w-20 bg-black rounded border border-border overflow-hidden shrink-0">
                                         <img src={photo.fileUrl} alt={photo.title} className="w-full h-full object-cover" />
                                         <div className="absolute top-0 left-0 bg-primary/90 text-primary-foreground text-[8px] font-bold px-1.5 py-0.5 rounded-br">
-                                            E{index + 1} PHOTO
+                                            E{index + 1} {dict.reports.view.photo}
                                         </div>
                                     </div>
 
@@ -156,8 +158,8 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                                         </div>
 
                                         <div className="text-[9px] text-white/50 space-y-0.5 font-mono uppercase tracking-tighter">
-                                            <div>Taken: {new Date(photo.timestamp).toLocaleString()}</div>
-                                            <div>By: <span className="text-primary/70">{capturedBy}</span></div>
+                                            <div>{dict.reports.view.taken}: {new Date(photo.timestamp).toLocaleString()}</div>
+                                            <div>{dict.reports.view.by}: <span className="text-primary/70">{capturedBy}</span></div>
                                         </div>
 
                                         {photo.linkedMarkerIds.length > 0 && (
@@ -176,7 +178,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                     })}
                     {photos.length === 0 && (
                         <div className="border border-dashed border-border/40 rounded-lg p-6 text-center bg-slate-900/20">
-                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-bold">No Photos Registered</span>
+                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-bold">{dict.reports.view.no_photos}</span>
                         </div>
                     )}
                 </div>
@@ -187,7 +189,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                 <div className="flex items-center justify-between mb-3">
                     <label className="text-[10px] font-bold uppercase text-primary/60 tracking-widest flex items-center gap-2">
                         <Video size={14} />
-                        Video Locker
+                        {dict.reports.view.video_locker}
                     </label>
                     <Button
                         onClick={() => setIsVideoModalOpen(true)}
@@ -195,7 +197,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                         size="sm"
                         icon={Plus}
                     >
-                        New Entry
+                        {dict.reports.view.new_entry}
                     </Button>
                 </div>
 
@@ -211,7 +213,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                                     <div className="relative aspect-square w-20 bg-black rounded border border-border flex items-center justify-center shrink-0">
                                         <Video size={24} className="text-primary/20" />
                                         <div className="absolute top-0 left-0 bg-primary/90 text-primary-foreground text-[8px] font-bold px-1.5 py-0.5 rounded-br">
-                                            V{index + 1} VIDEO
+                                            V{index + 1} {dict.reports.view.video}
                                         </div>
                                     </div>
 
@@ -231,9 +233,9 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                                         </div>
 
                                         <div className="text-[9px] text-white/50 space-y-0.5 font-mono uppercase tracking-tighter">
-                                            <div>Taken: {new Date(video.timestamp).toLocaleString()}</div>
-                                            <div>By: <span className="text-primary/70">{capturedBy}</span></div>
-                                            <div>Source: <span className="opacity-80">{video.sourceType === 'OTHER' ? video.otherSourceText : video.sourceType}</span></div>
+                                            <div>{dict.reports.view.taken}: {new Date(video.timestamp).toLocaleString()}</div>
+                                            <div>{dict.reports.view.by}: <span className="text-primary/70">{capturedBy}</span></div>
+                                            <div>{dict.reports.view.source}: <span className="opacity-80">{video.sourceType === 'OTHER' ? video.otherSourceText : video.sourceType}</span></div>
                                         </div>
 
                                         {video.linkedMarkerIds.length > 0 && (
@@ -252,7 +254,7 @@ export default function EvidenceManager({ photos, videos, markers, onPhotosChang
                     })}
                     {videos.length === 0 && (
                         <div className="border border-dashed border-border/40 rounded-lg p-6 text-center bg-slate-900/20">
-                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-bold">No Videos Registered</span>
+                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-bold">{dict.reports.view.no_videos}</span>
                         </div>
                     )}
                 </div>

@@ -86,10 +86,10 @@ export default function TemplatesPage() {
                     <div>
                         <h1 className="text-2xl font-black uppercase tracking-tight text-foreground flex items-center gap-3">
                             <FileText className="text-primary" size={28} />
-                            {dict.admin_panel.hub.templates}
+                            {dict.admin.templates.title}
                         </h1>
                         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-1">
-                            {dict.admin_panel.hub.templates_desc}
+                            {dict.admin.templates.subtitle}
                         </p>
                     </div>
                 </div>
@@ -106,7 +106,9 @@ export default function TemplatesPage() {
                 {(Object.entries(groups) as [string, any[]][]).map(([type, list]) => (
                     <div key={type} className="space-y-4">
                         <div className="flex items-center gap-2 pb-2 border-b border-border">
-                            <span className="text-small font-black uppercase tracking-[0.2em] text-primary">{type} Templates</span>
+                            <span className="text-small font-black uppercase tracking-[0.2em] text-primary">
+                                {dict.admin.templates.groups[type.toLowerCase() as keyof typeof dict.admin.templates.groups]}
+                            </span>
                             <span className="text-[10px] bg-muted px-2 py-0.5 rounded-full font-bold">{list.length}</span>
                         </div>
                         <div className="space-y-3">
@@ -173,9 +175,9 @@ export default function TemplatesPage() {
                                         onChange={e => setEditingTemplate({ ...editingTemplate, type: e.target.value })}
                                         className="w-full bg-white/[0.03] border border-white/10 rounded px-4 py-3 text-sm font-bold focus:outline-none focus:border-primary/40 transition-colors text-foreground [&>option]:bg-black"
                                     >
-                                        <option value="REPORT">Report</option>
-                                        <option value="CASE">Case</option>
-                                        <option value="KOMPENDIUM">Kompendium</option>
+                                        <option value="REPORT">{dict.admin.templates.context_types.report}</option>
+                                        <option value="CASE">{dict.admin.templates.context_types.case}</option>
+                                        <option value="KOMPENDIUM">{dict.admin.templates.context_types.kompendium}</option>
                                     </select>
                                 </div>
                                 <div className="space-y-3">

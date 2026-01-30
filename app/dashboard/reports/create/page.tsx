@@ -311,7 +311,7 @@ function CreateReportContent() {
                     <section className="bg-card border border-border rounded-md overflow-hidden shadow-sm">
                         <div className="bg-muted/30 border-b border-border p-4 flex items-center gap-2">
                             <Scale size={16} className="text-primary" />
-                            <h3 className="text-small font-black uppercase tracking-[0.2em] text-foreground">Confiscations</h3>
+                            <h3 className="text-small font-black uppercase tracking-[0.2em] text-foreground">{dict.reports.form.confiscations}</h3>
                         </div>
                         <div className="p-4">
                             <ConfiscationLinker

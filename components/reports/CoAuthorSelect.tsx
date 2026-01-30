@@ -7,6 +7,7 @@ import { Modal } from "@/components/ui/Modal"
 import { Input } from "@/components/ui/Input"
 import { Chip } from "@/components/ui/Chip"
 import { getUsers } from "@/app/actions/user"
+import { useTranslation } from "@/lib/i18n"
 
 interface Agent {
     id: string
@@ -20,6 +21,7 @@ interface CoAuthorSelectProps {
 }
 
 export default function CoAuthorSelect({ selectedIds, onChange }: CoAuthorSelectProps) {
+    const { dict } = useTranslation()
     const [isOpen, setIsOpen] = useState(false)
     const [search, setSearch] = useState("")
     const [agents, setAgents] = useState<Agent[]>([])
@@ -65,7 +67,7 @@ export default function CoAuthorSelect({ selectedIds, onChange }: CoAuthorSelect
             {/* Selected Chips Area */}
             <div className="flex flex-wrap gap-2 min-h-[40px] p-2 rounded border border-border bg-background/30 items-center">
                 {selectedAgents.length === 0 && (
-                    <span className="text-xs text-muted-foreground italic px-2">No co-authors selected</span>
+                    <span className="text-xs text-muted-foreground italic px-2">{dict.reports.form.no_coauthors}</span>
                 )}
                 {selectedAgents.map(agent => (
                     <Chip
@@ -85,22 +87,22 @@ export default function CoAuthorSelect({ selectedIds, onChange }: CoAuthorSelect
                 icon={Plus}
                 className="w-full"
             >
-                Add / Remove Co-Authors
+                {dict.reports.form.add_remove_coauthors}
             </Button>
 
             <Modal
                 isOpen={isOpen}
                 onClose={() => setIsOpen(false)}
-                title="Select Participating Officers"
+                title={dict.reports.form.select_officers}
                 footer={
-                    <Button onClick={() => setIsOpen(false)}>Done</Button>
+                    <Button onClick={() => setIsOpen(false)}>{dict.common.confirm}</Button>
                 }
             >
                 <div className="space-y-4">
                     <div className="relative">
                         <Search className="absolute left-3 top-2.5 text-muted-foreground h-4 w-4" />
                         <Input
-                            placeholder="Search by name or badge..."
+                            placeholder={dict.reports.form.search_placeholder}
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             className="pl-9"
@@ -110,7 +112,7 @@ export default function CoAuthorSelect({ selectedIds, onChange }: CoAuthorSelect
                     <div className="space-y-1 max-h-[300px] overflow-y-auto">
                         {loading ? (
                             <div className="text-center py-8 text-muted-foreground text-xs uppercase tracking-widest animate-pulse">
-                                Loading Personnel Database...
+                                {dict.reports.form.loading_personnel}
                             </div>
                         ) : (
                             <>
@@ -132,7 +134,7 @@ export default function CoAuthorSelect({ selectedIds, onChange }: CoAuthorSelect
                                 })}
                                 {filteredAgents.length === 0 && (
                                     <div className="text-center py-8 text-muted-foreground text-xs uppercase tracking-widest">
-                                        No officers found
+                                        {dict.reports.form.no_officers}
                                     </div>
                                 )}
                             </>
